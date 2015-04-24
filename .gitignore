@@ -3,6 +3,6 @@
 *.rsf
 *.pdf
 
-DATA
-XFig
-UTIL
+DATA/
+XFig/
+UTIL/
