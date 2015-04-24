@@ -1,0 +1,44 @@
+1.7-svn	sfspike	GPGN302/lab03/foldmap:	gsickles@gc297-18	Mon Mar 30 22:05:55 2015
+
+	d2=10
+	o1=0
+	n2=24
+	d3=15
+	o2=0
+	label1="t"
+	n3=10
+	data_format="native_float"
+	o3=0
+	label2="o"
+	label3="s"
+	esize=4
+	in="stdout"
+	unit1="s"
+	unit2="m"
+	unit3="m"
+	d1=0.004
+	n1=1
+	in="stdin"
+
+1.7-svn	sfmath	GPGN302/lab03/foldmap:	gsickles@gc297-18	Mon Mar 30 22:05:55 2015
+
+	x2=2
+	input=0
+	x3=3
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	x1=1
+	in="stdin"
+
+1.7-svn	sfscale	GPGN302/lab03/foldmap:	gsickles@gc297-18	Mon Mar 30 22:05:55 2015
+
+	data_format="native_float"
+	esize=4
+	in="/tmp/gsickles/GPGN302/lab03/foldmap/shot.rsf@"
+1.7-svn	sfput	GPGN302/lab03/foldmap:	gsickles@gc297-18	Mon Mar 30 22:05:57 2015
+
+	data_format="native_float"
+	n2=240
+	in="/tmp/gsickles/GPGN302/lab03/foldmap/traces.rsf@"
+	n3=1

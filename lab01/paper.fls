@@ -1,0 +1,13 @@
+PWD /u/eu/be/gsickles/School/GPGN302/lab01
+INPUT /etc/texmf/web2c/texmf.cnf
+INPUT /usr/share/texmf/web2c/texmf.cnf
+INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
+INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
+INPUT /u/eu/be/gsickles/School/GPGN302/lab01/paper.tex
+OUTPUT /u/eu/be/gsickles/School/GPGN302/lab01/paper.log
+INPUT /u/eu/be/gsickles/School/GPGN302/lab01/assignment.tex
+INPUT /u/eu/be/gsickles/School/GPGN302/lab01/assignment.tex
+INPUT /usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm
+OUTPUT /u/eu/be/gsickles/School/GPGN302/lab01/paper.pdf
+INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map

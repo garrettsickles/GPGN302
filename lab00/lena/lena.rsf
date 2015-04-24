@@ -1,0 +1,33 @@
+n1=512 n2=513 in=lena.img data_format=native_uchar
+1.7-svn	sfdd	gpgn302/lab00/lena:	sfarris@gc297-02	Tue Feb 24 11:00:19 2015
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+1.7-svn	sfwindow	gpgn302/lab00/lena:	sfarris@gc297-02	Tue Feb 24 11:00:19 2015
+
+	d2=1
+	n2=512
+	o1=0
+	o2=1
+	data_format="native_float"
+	f2=1
+	esize=4
+	in="stdout"
+	d1=1
+	n1=512
+	in="stdin"
+
+1.7-svn	sftransp	gpgn302/lab00/lena:	sfarris@gc297-02	Tue Feb 24 11:00:19 2015
+
+	o1=1
+	d2=1
+	n2=512
+	o2=0
+	data_format="native_float"
+	esize=4
+	in="/tmp/sfarris/gpgn302/lab00/lena/lena.rsf@"
+	d1=1
+	n1=512

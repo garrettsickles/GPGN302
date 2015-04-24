@@ -1,0 +1,129 @@
+1.7-svn	sfsegyread	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:05:40 2015
+
+	d2=1
+	o1=0
+	n2=120120
+	o2=0
+	label1="Time"
+	data_format="native_float"
+	head="tracesraw-t.rsf"
+	label2="Trace"
+	esize=4
+	in="stdout"
+	unit1="s"
+	d1=0.004
+	n1=1500
+	in="stdin"
+
+1.7-svn	sfput	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:05:40 2015
+
+	d2=1
+	d3=1
+	n2=120
+	n3=1001
+	data_format="native_float"
+	in="/tmp/gsickles/GPGN302/lab03/viking/tracesraw.rsf@"
+	o2=0
+	o3=101
+1.7-svn	sfwindow	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:05:47 2015
+
+	d2=1
+	n2=120
+	o1=0
+	d3=1
+	o2=0
+	label1="Time"
+	n3=79
+	data_format="native_float"
+	o3=101
+	label2="Trace"
+	f3=0
+	esize=4
+	in="/tmp/gsickles/GPGN302/lab03/viking/tracesrawA.rsf@"
+	unit1="s"
+	d1=0.004
+	n1=1500
+1.7-svn	sfcat	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:05:52 2015
+
+	n3=1012
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+1.7-svn	sfreverse	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:05:52 2015
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+1.7-svn	sfput	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:05:52 2015
+
+	data_format="native_float"
+	n2=121440
+	in="/tmp/gsickles/GPGN302/lab03/viking/traces.rsf@"
+	n3=1
+1.7-svn	sfintbin	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:06:00 2015
+
+	d2=1
+	n2=120
+	d3=1
+	o2=10
+	n3=1012
+	data_format="native_float"
+	o3=0
+	esize=4
+	in="stdout"
+	in="stdin"
+
+1.7-svn	sfput	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:06:00 2015
+
+	data_format="native_float"
+	label1=t
+	label2=o
+	label3=s
+	d2=0.025
+	o2=0.262
+	d3=0.025
+	o3=0
+	unit1=s
+	unit2=km
+	in="/tmp/gsickles/GPGN302/lab03/viking/shot.rsf@"
+	unit3=km
+1.7-svn	sfwindow	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:07:43 2015
+
+	d2=0.025
+	n2=120
+	o1=0
+	d3=0.025
+	n3=1012
+	o2=0.262
+	label1="t"
+	data_format="native_float"
+	o3=0
+	label2="o"
+	label3="s"
+	esize=4
+	max1=3
+	in="stdout"
+	unit1="s"
+	unit2="km"
+	unit3="km"
+	d1=0.004
+	n1=751
+	in="stdin"
+
+1.7-svn	sftpow	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:07:43 2015
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+1.7-svn	sfbyte	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:07:47 2015
+
+	data_format="native_uchar"
+	clip=332.88
+	esize=1
+	in="/tmp/gsickles/GPGN302/lab03/viking/shot-byte.rsf@"

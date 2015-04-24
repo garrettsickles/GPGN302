@@ -1,0 +1,86 @@
+1.7-svn	sfspike	GPGN302/lab01/sigsbee:	gsickles@gc297-26	Tue Mar  3 10:56:58 2015
+
+	o1=0
+	label1="Time"
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	unit1="s"
+	d1=0.001
+	n1=2000
+	in="stdin"
+
+1.7-svn	sfpad	GPGN302/lab01/sigsbee:	gsickles@gc297-26	Tue Mar  3 10:56:58 2015
+
+	end1=2000
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	n1=4000
+	in="stdin"
+
+1.7-svn	sfricker1	GPGN302/lab01/sigsbee:	gsickles@gc297-26	Tue Mar  3 10:56:58 2015
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+1.7-svn	sfwindow	GPGN302/lab01/sigsbee:	gsickles@gc297-26	Tue Mar  3 10:56:58 2015
+
+	o1=0
+	label1="Time"
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	unit1="s"
+	d1=0.001
+	n1=2000
+	in="stdin"
+
+1.7-svn	sfscale	GPGN302/lab01/sigsbee:	gsickles@gc297-26	Tue Mar  3 10:56:58 2015
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+1.7-svn	sfput	GPGN302/lab01/sigsbee:	gsickles@gc297-26	Tue Mar  3 10:56:58 2015
+
+	label1=t
+	data_format="native_float"
+	in="stdout"
+	unit1=s
+	in="stdin"
+
+1.7-svn	sftransp	GPGN302/lab01/sigsbee:	gsickles@gc297-26	Tue Mar  3 10:56:58 2015
+
+	d2=0.001
+	n2=2000
+	o2=0
+	data_format="native_float"
+	label2="t"
+	esize=4
+	in="/tmp/gsickles/GPGN302/lab01/sigsbee/wav.rsf@"
+	unit2="s"
+	n1=1
+1.7-svn	sfawefd2d	GPGN302/lab01/sigsbee:	gsickles@gc297-26	Tue Mar  3 10:56:59 2015
+
+	d2=0.00762
+	n2=1201
+	o1=1.3716
+	d3=0.15
+	n3=14
+	o2=5.4864
+	label1=""
+	data_format="native_float"
+	o3=0
+	label2=""
+	label3="t"
+	esize=4
+	in="/tmp/gsickles/GPGN302/lab01/sigsbee/wfld0.rsf@"
+	unit1=""
+	unit2=""
+	unit3="s"
+	d1=0.00762
+	n1=601

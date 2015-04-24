@@ -1,0 +1,36 @@
+1.7-svn	sfmath	GPGN302/lab03/foldmap:	gsickles@gc297-18	Mon Mar 30 22:05:57 2015
+
+	x2=1
+	d2=15
+	n2=10
+	o1=0
+	o2=0
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	x1=0
+	d1=10
+	n1=24
+	in="stdin"
+
+1.7-svn	sfput	GPGN302/lab03/foldmap:	gsickles@gc297-18	Mon Mar 30 22:05:57 2015
+
+	n1=240
+	data_format="native_float"
+	n2=1
+	in="/tmp/gsickles/GPGN302/lab03/foldmap/oco.rsf@"
+1.7-svn	sfmath	GPGN302/lab03/foldmap:	gsickles@gc297-18	Mon Mar 30 22:05:57 2015
+
+	input=0
+	data_format="native_float"
+	esize=4
+	s=1
+	in="/tmp/gsickles/GPGN302/lab03/foldmap/mco.rsf@"
+	x1=2
+1.7-svn	sfmath	GPGN302/lab03/foldmap:	gsickles@gc297-18	Mon Mar 30 22:05:57 2015
+
+	input=0
+	data_format="native_float"
+	esize=4
+	in="/tmp/gsickles/GPGN302/lab03/foldmap/imco.rsf@"
+	x1=1

@@ -1,0 +1,61 @@
+1.7-svn	sfmath	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:07:19 2015
+
+	x2=1
+	d2=0.025
+	n2=1012
+	o1=0.262
+	o2=0
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	x1=0
+	d1=0.025
+	n1=120
+	in="stdin"
+
+1.7-svn	sfput	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:07:19 2015
+
+	n1=121440
+	data_format="native_float"
+	n2=1
+	in="/tmp/gsickles/GPGN302/lab03/viking/ccut-oo.rsf@"
+1.7-svn	sfmath	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:07:19 2015
+
+	input=0
+	data_format="native_float"
+	esize=4
+	in="/tmp/gsickles/GPGN302/lab03/viking/ccut-hh.rsf@"
+	x1=1
+1.7-svn	sfmath	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:07:19 2015
+
+	input=0
+	data_format="native_float"
+	esize=4
+	in="/tmp/gsickles/GPGN302/lab03/viking/ccut-hi.rsf@"
+	x1=1
+1.7-svn	sfcat	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:07:19 2015
+
+	n2=2
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+1.7-svn	sftransp	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:07:19 2015
+
+	o1=0
+	d2=0.025
+	n2=121440
+	o2=0.262
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	d1=0.025
+	n1=2
+	in="stdin"
+
+1.7-svn	sfdd	GPGN302/lab03/viking:	gsickles@gc297-18	Mon Mar 30 22:07:19 2015
+
+	data_format="native_int"
+	esize=4
+	in="/tmp/gsickles/GPGN302/lab03/viking/ccut-mh.rsf@"
