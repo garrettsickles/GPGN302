@@ -1,0 +1,115 @@
+\section{Introduction}
+
+%% 
+ % SNR improvement by stacking 
+ %%
+Redundant seismic experiments are designed to increase the data
+signal-to-noise (SNR) ratio. SNR is improved when traces from
+different experiments are summed -- the coherent signal amplifies, but
+the incoherent noise attenuates. 
+
+We can use stack, for example, in common-midpoint gathers (CMP),
+although this is not the only possibility. Under the assumption that
+the medium is laterally invariant, i.e. the reflectors are horizontal
+and the velocity does not change laterally, all traces contained in a
+CMP sample the same points in the subsurface located right under the
+surface common midpoint. In this case, the signal from traces
+corresponding to different offsets is coherent, while the noise
+contained in each trace is not.
+
+% ------------------------------------------------------------
+\inputdir{XFig}
+% ------------------------------------------------------------
+\sideplot{cmp}{width=\textwidth}{Common-midpoint gather geometry
+  highlighting repeat measurements of the same point in the
+  subsurface.}
+
+%% 
+ % hyperbolic moveout 
+ %%
+The complication is that the signal from a given reflector arrives at
+various receivers at different offsets at different times. This is due
+to the fact that the waves propagate over larger distances in the
+subsurface to account to the different offsets. Assuming that we
+observe a reflector located at depth $z$ in a medium characterized by
+the constant velocity $v$ with source and a receiver separated by
+distance $2h$, then the total propagation time is:
+%
+\beq
+t = \frac{d}{v} = \frac{2\sqrt{z^2+h^2}}{v} \;.
+\eeq
+%
+The traveltime $t$ increases with the half-offset $h$ following a
+hyperbolic curve, i.e. the traveltime is characterized by
+\textbf{hyperbolic moveout}. Ideally, we would like to correct the
+traveltime such that the signal from the given reflector appears at
+the same time, regardless of offset. In this case, we can simply sum
+all traces over offset and obtain data with higher SNR corresponding
+to the factor $\sqrt{n}$, where $n$ is the number of traces in the
+CMP. For example, we can correct all traces such that the traveltimes
+for different offsets are equal to the traveltime at $h=0$, i.e.
+%
+\beq
+t_0 = \frac{2z}{v}\;.
+\eeq
+% 
+This process, simply called \textbf{Normal Moveout} (NMO)
+\textbf{correction}, is one of the most basic imaging techniques used
+for seismic data processing.
+
+%% 
+ % stacking velocity 
+ %%
+The NMO correction requires that we know the velocity $v$ which
+describes the data hyperbolic trajectory as a function of time and
+offset. This hyperbolic trajectory depends on the time at zero offset
+$t_0$, and it is characterized by just one parameter which is called
+the \textbf{stacking velocity}. This parameter has units of velocity,
+and it is related to the medium velocity. If the medium changes as a
+function of depth, then the stacking velocity for an event at a given
+depth is simply a combination of all velocities above this
+depth. Therefore, the stacking velocity does not necessarily have a
+physical meaning other than that it characterizes the hyperbolic
+moveout of reflections in CMPs. This velocity does not correspond to
+any particular point in the subsurface, but it simply allows us to
+bring all traces in a CMP to a common time.
+
+%% 
+ % picking
+ %%
+In order to apply the NMO correction, we need to know the stacking
+velocity. We can find this parameter by scanning over a wide range of
+possible stacking velocities and evaluating how strong the stack is at
+every time. The velocity for which the stack is strongest is the
+optimal parameter for the NMO correction. We can thus apply the
+moveout correction as a function of offset, and then accumulate data
+over offset to obtain the data stack.
+
+%% 
+ % NMO + stack 
+ %%
+The NMO-stack process consists of the following steps:
+\begin{enumerate}
+\item Sort data in common-midpoint gathers.
+\item Find the stacking velocity by scanning.
+\item Apply the normal moveout correction.
+\item Stack over offset.
+\end{enumerate}
+The result of this operation is a \textbf{stack section}, i.e. a
+representation of the data as a function of time and position (which
+corresponds to the midpoint coordinates). This stack is comparable
+with the \textbf{zero-offset section}, since all traces are corrected
+to the zero-offset traveltime. However, the stack is characterized by
+higher SNR since it accumulates information from multiple offsets, in
+contrast with the zero-offset section which contains only the traces
+from the zero offset. Therefore the stack section is more suitable for
+interpretation, since more events with geologic significance are
+visible.
+
+Note that the NMO-stack process assumes that all data traces are
+characterized by hyperbolic moveout. However, this assumption is not
+true of all events. For example, the direct waves from the source to
+the receivers are not hyperbolic. However, the NMO correction remaps
+all events in the data regardless of their moveout. The non-hyperbolic
+events represent noise that should be removed from the data before the
+NMO correction, if possible.

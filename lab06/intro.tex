@@ -1,0 +1,139 @@
+\section{Introduction}
+
+%% 
+ % data
+ %%
+Seismic data are acquired with redundant geometry, i.e. we try to
+illuminate a certain point in the subsurface from different
+directions. We refer to such information as \textbf{prestack
+  data}. These data are sorted in many domains and can be processed to
+increase the signal-to-noise ratio using different procedures,
+e.g. normal moveout correction and stack, thus leading to
+\textbf{poststack data}. The stacked data are kinematically equivalent
+with zero-offset data, i.e. an experiment for which the sources and
+receivers are co-located, but have higher signal-to-noise ratio.
+
+%% 
+ % migration
+ %%
+Poststack migration produces \textbf{images} (i.e. reflectors) of the
+Earth's interior as a function of depth. This is in contrast with
+\textbf{data} which represent reflections as a function of time. 
+%
+The transformation from the data to the image is known as
+\textbf{seismic migration} and requires knowledge of the velocity
+model. We can produce velocity models using techniques like the ones
+discussed in the preceding labs, i.e. build the stacking velocity,
+then the interval velocity, etc. Such a process is known by the
+generic name of \textbf{migration velocity analysis}. If the velocity
+is not completely accurate, then the images are partially distorted,
+thus indicating the need for a velocity update. Here we address the
+following questions: how does the velocity influence the image and how
+do we know if the velocity is correct?
+
+%% 
+ % exploding reflector model 
+ %%
+We can answer these questions using zero-offset migration under the
+\textbf{exploding reflector} model, \rfg{expref}. This conceptual
+model is designed to capture the behavior of waves corresponding to
+sources and receivers located at the same position on the surface. One
+possible scenario under which a wave leaving a source returns at the
+same position requires that the angle of incidence on the reflector is
+$90^\circ$. In this case, the reflected wave leaves the reflector in
+opposite direction relative to the incoming wave, and thus propagates
+along the same path to the receiver which is co-located with the
+source. In this case, the down-going and up-going paths are identical
+and the propagation times from the source to the reflector and from
+the reflector to the receiver are also identical.\footnote{It is
+  possible to observe data at zero offset even if the propagation
+  paths are not identical. For example, waves can propagate downward
+  and upward on opposite sides of a low velocity lens.} Thus, the time
+at which we observe a reflection is precisely twice the propagation
+time from the reflector to the receivers. This is true for all points
+in the subsurface, therefore we can simulate zero offset data by
+considering that the reflectors are populated with many sources which
+are all triggered at the same time.
+
+% ------------------------------------------------------------
+\inputdir{XFig} 
+\plot{expref}{width=\textwidth}{Exploding reflector model.}
+% ------------------------------------------------------------
+
+%% 
+ % poststack migration
+ %%
+Assume that a point in the subsurface (e.g. a diffractor) becomes a
+source at some time. Later we observe waves (diffractions) arriving at
+the surface. We can find the point that is responsible for a
+diffraction by running time backward until the moment when the
+reflector exploded. If the velocity model is correct, then all the
+diffracted energy focuses at the sources distributed along the
+reflectors. Under the exploding reflector model, we can exploit this
+idea in two ways: either we halve the observation time and then
+propagate the data backward with the actual velocity until time zero,
+or we keep the observation time and propagate the data backward in
+time with the velocity halved. In both scenarios we move the data from
+the surface to the actual reflector position, i.e. we perform
+\textbf{poststack migration}.
+
+%% 
+ % post-stack migration procedure
+ %%
+Exploiting this general idea requires our ability to perform two
+operations. First, we need to isolate diffractions from seismic data
+and, second, we need to run time backward to allow waves to focus at
+the source (i.e. to migrate the data).
+\begin{itemize}
+\item The first operation can be implemented using \textbf{plane-wave
+    destruction}. We can assume that the data consist of nearly-planar
+  objects, i.e. reflectors, and non-planar events,
+  i.e. diffractions. We can also assume that reflections are stronger
+  in magnitude than diffractions. If we can somehow destroy the
+  strongest component of the data, i.e. the reflections, what is left
+  is likely to be dominated by diffractions. We can then use the
+  diffractions to assess the quality of the velocity model by
+  evaluating focusing at the initial trigger time.
+
+\item The second operation is \textbf{wave-equation migration}, which
+  allows us to run time backward and focus waves at their
+  sources. Since we don't know the correct model of the earth, we can
+  try migration with different velocities and then select the one
+  which is best, as measured by the quality of diffraction
+  focusing. Once we find the correct model, then we can migrate the
+  entire dataset containing both reflections and diffractions.
+\end{itemize}
+
+%% 
+ % example
+ %%
+The example in \rfgs{vel00}-\rfn{vel01} demonstrates poststack imaging
+under the exploding reflector model.  According to the Huygens
+Principle, the data observed on the surface, \rfgs{dat00}-\rfn{dat01},
+are the superposition of the wavefield from each individual source,
+\rfgs{wfl00-01}-\rfn{wfl01-13}. Then, if we back-propagate the
+observed data with correct velocity, we obtain the images in
+\rfgs{zoi00-02}-\rfn{zoi01-02}, showing that the energy from each
+source located on the reflector is correctly focused. However, if we
+image the same data shown in \rfgs{dat00}-\rfn{dat01} using different
+velocities, we obtain images with partially defocused sources on the
+reflector, \rfgs{zoi00-00}-\rfn{zoi01-04}. This partial defocusing is
+only visible if we can isolate from the data the energy corresponding
+to a specific source on the reflector, i.e. the energy associated with
+a diffractor due to a truncation or to a small-scale geologic feature.
+
+% ------------------------------------------------------------
+\inputdir{syncline} 
+% ------------------------------------------------------------
+
+\multiplot{2}{vel00,vel01,dat00,dat01}{width=0.45\textwidth}{(a)-(b)
+  Syncline models with overlay depicting reflector, and (c)-(d) data
+  acquired on the surface. }
+
+\multiplot{2}{wfl00-01,wfl01-01,wfl00-05,wfl01-05,wfl00-09,wfl01-09,wfl00-13,wfl01-13}
+{width=0.45\textwidth}{Wavefield snapshots generated at different
+  times under the exploding reflector model.}
+
+\multiplot{2}{zoi00-00,zoi01-00,zoi00-02,zoi01-02,zoi00-04,zoi01-04}
+{width=0.45\textwidth} {Zero-offset images constructed for (a)-(b)
+  low, (c)-(d) correct and (e)-(f) high migration velocity.}

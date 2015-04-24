@@ -1,0 +1,142 @@
+\section{Introduction}
+
+A complex medium is responsible for a complex seismic wavefield, and
+thus for complex seismic data. By definition, a \textbf{wavefield} is
+a mathematical representation of a propagating wave at all times $t$
+and all positions in space $\xx=\{ x,y,z \}$:
+%
+\[ \UU\ofxt \;. \]
+%
+Similarly, \textbf{data} represents the wavefield at all times
+restricted in space to the receiver coordinates $\rr=\{ \rx, \ry \}$:
+%
+\[ \DD\ofrt \;. \]
+%
+An \textbf{image} of the subsurface is a representation of the
+reflectors as a function of space:
+%
+\[ \RR\ofx \;. \]
+%
+Data are normally much more complicated than images, therefore
+geologic interpretation should be done on migrate images, instead of
+data.
+
+Various components of the seismic wavefield are labeled with different
+names for easier understanding and communication. We can distinguish
+the following types of waves:
+\begin{itemize}
+\item \textbf{direct waves} -- propagate from the source directly to
+  the receivers, without bouncing of any interface in the subsurface;
+  a special kind of direct waves are the so-called \textbf{diving
+    waves};
+\item \textbf{reflections} -- propagate from the source to sharp but
+  continuous interfaces in the subsurface, then return to the
+  receivers;
+\item \textbf{diffractions} -- propagate from the source to sharp and
+  discontinuous objects, then return to the receivers;
+\item \textbf{multiples} -- propagate from the source in the
+  subsurface like reflection or diffractions, but change direction
+  more than once either on the surface or at subsurface
+  discontinuities.
+\end{itemize}
+
+The seismic data are records of the ground motion as a function of
+time. Observations at every receiver position are collected in a
+seismic trace, $\DD\oft$. We often record a large number of traces for
+different combinations of source and receiver coordinates, or other
+derived coordinates:
+\begin{itemize}
+  \item $\ss=\{ \sx, \sy \}$: source coordinates;
+  \item $\rr=\{ \rx, \ry \}$: receiver coordinates;
+  \item $\ho=\{ \hx, \hy \}$: source-receiver half-offset;
+    \[ \ho = \frac{\rr - \ss}{2} \]
+  \item $\oo=\{ \ox, \oy \}$: source-receiver offset;
+    \[ \oo = 2\ho\]
+  \item $\mm=\{ \mx, \my \}$: source-receiver midpoint;
+    \[ \mm = \frac{\rr + \ss}{2} \]
+\end{itemize}
+We can represent the seismic data either as a function of source and
+receiver coordinates
+%
+\[ \DD\lp \ss,\rr,t \rp \;, \]
+%
+or as a function of midpoint and (half) offset coordinates
+%
+\[ \DD\lp \mm,\ho,t \rp \;. \]
+%
+This is just a change of coordinates -- the same traces are present in
+both representations. For convenience, seismic observations are often
+analyzed in subsets of the data:
+\begin{itemize}
+\item \textbf{common-shot gather} -- collection of all traces
+  corresponding to the same source, \rfg{csg}:
+  % 
+  \[ \DD\lp \ss=fixed, \rr, t \rp \;.\]
+  % 
+\item \textbf{common-receiver gather} -- collection of all traces
+  corresponding to the same receiver, \rfg{crg}:
+  % 
+  \[ \DD\lp \ss, \rr=fixed, t \rp \;.\]
+  % 
+\item \textbf{common-midpoint gather} -- collection of all traces with
+  the same midpoint between sources and receivers, \rfg{cmp}:
+  % 
+  \[ \DD\lp \mm=fixed, \ho, t \rp \;.\]
+  % 
+\item \textbf{common-offset gather} -- collection of all traces with
+  the same source-receiver separation, \rfg{cog}:
+  % 
+  \[ \DD\lp \mm, \ho=fixed, t \rp \;.\] 
+  % 
+  A special case of a common-offset section is a \textbf{zero-offset
+    section}, i.e. $\ho=\mathbf{0}$. Another special case of a
+  common-offset section is a \textbf{near-offset section},
+  i.e. $\ho=small$.
+\item \textbf{time slice} -- collection of all samples with the same
+  recording time:
+  % 
+  \[ \DD\lp \ss, \rr, t=fixed \rp \;,\]
+  % 
+  or 
+  % 
+  \[ \DD\lp \mm, \ho, t=fixed \rp \;.\]
+  % 
+\end{itemize}
+
+% ------------------------------------------------------------
+\inputdir{XFig}
+% ------------------------------------------------------------
+\multiplot{2}{csg,crg,cmp,cog}{width=0.45\textwidth}
+{(a) Common-shot gather, (b) common-receiver gather, (c)
+  common-midpoint gather, and (d) common-offset gather.}
+
+Seismic images can be constructed by processing the data in different
+subsets. For example, we can consider the following cases:
+\begin{itemize}
+\item \textbf{Zero-offset imaging} -- we construct an image of the
+  reflectivity in the Earth using a common-offset dataset:
+  % 
+  \[ \RR_z \ofx \]
+  % 
+  This type of imaging corresponds to the passive-array setup
+  discussed earlier.
+\item \textbf{Shot-record imaging} -- we construct an image of the
+  reflectivity in the Earth using a common-shot gather:
+  % 
+  \[ \RR_s \ofx \]
+  % 
+  This type of imaging corresponds to the active-array setup discussed
+  earlier. A typical dataset consists of multiple shot-gathers, each
+  having a different position in space. Each shot-gather generates an
+  independent image which is a different view of the interior of the
+  Earth. The final image is the summation of the images constructed
+  for individual shot-records:
+  % 
+  \beq 
+  \RR\ofx = \esum{shots} \RR_s \ofx 
+  \eeq
+  % 
+\end{itemize}
+In both cases, imaging requires that we know the parameters that
+control wave propagation in the Earth, i.e. the velocity and density
+for an acoustic seismic wavefield.

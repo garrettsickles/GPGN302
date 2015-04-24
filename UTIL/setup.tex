@@ -1,0 +1,40 @@
+\def\basedir{psava/gpgn302}
+
+\blue{
+  \sidebar{
+    \section{Configuration}
+    \begin{itemize}
+    \item Change to your home directory:\\
+      \texttt{cd $\sim$}
+    \item Modify your own \texttt{$\sim$/.bashrc} by adding the line\\
+      \texttt{source $\sim$psava/gpgn302/bashrc}
+    \item Source your modified \texttt{.bashrc} file:\\
+      \texttt{source $\sim$/.bashrc} \\
+	This file is sources automatically every time you open a new terminal.
+    \item Check that the environment variables are correct:\\
+      \texttt{env | grep RSFSRC} \\
+      You should get \texttt{RSFSRC=/data/psava/rsf}\\
+      \texttt{env | grep RSFROOT} \\
+      You should get \texttt{RSFROOT=/data/psava/rsfroot}
+    \item Make a symbolic link to the \LaTeX~setup directory:\\
+      \texttt{ln -s $\sim$psava/texmf .}\\
+      Mind the dot at the end of the command.
+    \item Copy the display setup file:\\
+      \texttt{cp $\sim$psava/gpgn302/XTpen .}\\
+      Mind the dot at the end of the command.
+    \item Create a directory where you will put your labs:\\
+      \texttt{mkdir gpgn302}
+    \item Change to the newly created lab directory:\\
+      \texttt{cd gpgn302}
+    \item Copy the lab utilities:\\
+      \texttt{cp -r $\sim$\basedir/UTIL .} \\
+      Mind the dot at the end of the command.
+    \item Make a symbolic link to the data directory:\\
+      \texttt{ln -s /data/psava/DATA .} \\
+      Mind the dot at the end of the command.
+    \item Make a symbolic link to the sketch directory:\\
+      \texttt{ln -s /data/psava/XFig .} \\
+      Mind the dot at the end of the command.
+    \end{itemize}
+  }
+}

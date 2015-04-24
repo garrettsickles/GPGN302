@@ -1,0 +1,103 @@
+\section{Introduction}
+
+Seismic data are acquired redundantly, i.e. multiple seismic
+experiments cover the same physical space, in order to increase the
+signal and to reduce the noise. The signal-to-noise ratio (SNR) is an
+important factor in evaluating the quality of the acquired seismic
+data. The general idea behind SNR improvement with the number of
+measurements is that the signal is repeatable, while the noise is
+not. By accumulating measurements at the same position in space, we
+are increasing the signal, while decreasing the noise.
+
+Consider measurements represented by probability density functions
+(PDF) $f\lp S \rp$, i.e. a distributions that can be characterized by
+mean $\bar{S}$ and by variance $\sigma^2$. We can refer to the mean
+$\bar{S}$ as the signal and to the standard deviation $\sigma$ as the
+noise, therefore we can define the SNR as the ratio of the mean to the
+standard deviation:
+%
+\beq
+SNR = \frac{\bar{S}}{\sigma} \;.
+\eeq
+%
+This relation assumes that the signal and the noise are uncorrelated,
+that the signal strength is constant with measurement and that the
+noise is random with zero mean and constant variance.
+
+The question is how does the SNR change when we add $n$ random
+variables, each characterized by a probability density function (PDF)
+with given mean and standard deviation? In order to answer this
+question, we make use of two important results from Statistics:
+\begin{itemize}
+\item The PDF characterizing the sum of several random variables is
+  the convolution of their PDFs.
+\item The PDF of the convolution of random variables is characterized
+  by mean and variance equal to the sum of means and variances of the
+  convolved PDFs.
+\end{itemize}
+In other words the PDF characterizing the sum of $n$ measurements has
+a mean equal to the sum of the means, and a variance equal to the sum
+of the variances. Therefore, the PDF characterizing the sum of $n$
+measurements has the mean $n\bar{S}$ and the variance $n\sigma^2$,
+i.e. the standard deviation is $\sqrt{n} \sigma$. Thus, the SNR is
+%
+\beq
+SNR_n = \frac{n\bar{S}}{\sqrt{n}\sigma}
+      = \frac{\bar{S}}{\sigma} \sqrt{n}
+      = SNR \sqrt{n} \;.
+\eeq
+%
+In other words, the SNR improves proportionally with the square-root
+of the number of measurements. For example, increasing the SNR by a
+factor of $2$ requires $4$ measurements, increasing the SNR by a
+factor of $5$ requires $25$ measurements,
+etc. \rfgs{sig-00}-\rfn{dat-39} and \rfg{stk} illustrate this idea. 
+
+% ------------------------------------------------------------
+\inputdir{snr}
+% ------------------------------------------------------------
+\multiplot{5}{sig-00,sig-09,sig-19,sig-29,sig-39,dat-00,dat-09,dat-19,dat-29,dat-39}
+{width=0.175\textwidth}{Signal (top row) and data (bottom row) obtained
+  by adding bandlimited noise to the signal.}
+
+\sideplot{stk}{width=0.5\textwidth}{Stack signal as a function of the
+  number of traces.}
+
+% ------------------------------------------------------------
+\inputdir{XFig} 
+% ------------------------------------------------------------
+\sideplot{cmp}{width=\textwidth}{Common-midpoint gather geometry
+  highlighting repeat measurements of the same point in the
+  subsurface.}
+
+The quantity we use to evaluate the number of repeat measurements is
+\textbf{fold}, which exploits measurement redundancy in
+common-midpoint gathers, i.e. subsets of the data selected for a fixed
+midpoint, for all offsets $\DD\lp \mm=fixed, \ho, t \rp$.  \rFg{cmp}
+shows the geometry of multiple source-receiver combinations with the
+same midpoint. All rays connecting corresponding sources and receivers
+sample the same position in the subsurface. Under the restrictive
+assumption that the reflector is horizontal and that the medium is
+laterally invariant, the traces corresponding to all offsets can be
+stacked to generate one trace corresponding the midpoint
+position. This addition does not make sense if the assumptions about
+the medium are violated. However, we can still use the fold concept to
+get a general idea of the redundancy of data acquisition.
+
+In order to evaluate the fold, we need to convert the acquisition
+parameters, i.e. source coordinates and offset, into midpoint and
+half-offset coordinates using the relations
+% 
+\bea
+\mm &=& \ss + \frac{\oo}{2} \\
+\ho &=&       \frac{\oo}{2} \;.
+\eea
+% 
+We can immediately note that the midpoint sampling is half the offset
+sampling, i.e. the distance between receivers determines the
+theoretical sampling along the reflector under investigation.
+Once we have constructed the fold map in $\mm-\ho$ coordinates, we can
+simply count how many times we hit the same midpoint regardless of
+offset, and obtain the fold as a function of space.
+
+

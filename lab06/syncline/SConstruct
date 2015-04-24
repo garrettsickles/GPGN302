@@ -1,0 +1,123 @@
+from rsf.proj import *
+import wplot,geom,awe
+
+par = dict(nt=2001, dt=0.001, ot=0, lt='t', ut='s',
+           nx=600,  dx=0.01,  ox=0, lx='x', ux='km',
+           nz=300,  dz=0.01,  oz=0, lz='z', uz='km',
+           frq=15,kt=100,jsnap=100,nb=100,verb='y'
+           )
+wplot.param(par)
+awe.param(par)
+
+nframes=int((par['nt']-1)/par['jsnap'])
+     
+# ------------------------------------------------------------
+# sources 
+
+par['mmid']=par['ox']+par['nx']/2*par['dx']
+
+Flow('sz',None,
+     '''
+     math n1=%(nx)d o1=%(ox)g d1=%(dx)g label1=%(lx)s unit1=%(ux)s
+     output="0.8+1.75*exp(-(x1-%(mmid)d)^2/4)"
+     ''' %par)
+Flow('sx','sz','math n1=%(nx)d o1=%(ox)g d1=%(dx)g output="x1"'%par)
+
+# ------------------------------------------------------------
+ns=2 # number of exploding reflector models
+Flow('ss',['sx','sz'],
+     '''
+     cat axis=2 space=n ${SOURCES[1]} |
+     transp |
+     put label1="" unit1="" label2="" unit2=""
+     ''')
+Flow('ss00','ss','window f2=2  j2=4')
+Flow('ss01','ss','window f2=20 j2=40')
+
+for js in range(ns):
+     tag='%02d'%js
+     Plot('ss'+tag,wplot.ssplot2d('plotfat=3',par))
+
+# ------------------------------------------------------------
+# receivers
+geom.horizontal2d('rr',par['oz'],'',par)
+Plot('rr',wplot.rrplot2d('',par))
+
+# ------------------------------------------------------------
+# velocity
+Flow('vel','sz',
+     '''
+     unif2 v00=2.0,2.1 n1=%(nz)d o1=%(oz)g d1=%(dz)g |
+     smooth rect1=25 rect2=25
+     '''%par)
+Plot('vel',wplot.igrey2d('mean=y',par))
+for js in range(ns):
+     tag='%02d'%js
+     Result('vel'+tag,['vel','rr','ss'+tag],'Overlay')
+
+# ------------------------------------------------------------
+# wavelet
+awe.wavelet('wav',par['frq'],'',par)
+Result('wav','window |' + wplot.waveplot('',par))
+
+# ------------------------------------------------------------
+# FD modeling
+for js in range(ns):
+     tag='%02d'%js
+     awe.cdafd2d('dat'+tag,'wfl'+tag,'wav','vel','ss'+tag,'rr','expl=y',par)
+
+     # data
+     Result('dat'+tag,'transp |' + wplot.dgrey2d('',par))
+
+     # wavefield
+     Flow('wbyt'+tag,'wfl'+tag,'byte gainpanel=a pclip=99')
+     for ifrm in range(nframes):
+          ftag = '-%02d'%ifrm
+          Plot(   'wfl'+tag+ftag,'wbyt'+tag,wplot.ifrm2d(ifrm,'',par))
+          Result( 'wfl'+tag+ftag,['wfl'+tag+ftag,'ss'+tag,'rr'],'Overlay')
+
+     # ------------------------------------------------------------
+     # FD migration
+     Flow('zod'+tag,'dat'+tag,
+          '''
+          window f2=%(kt)d | put o2=%(ot)g | pad n2out=%(nt)d |
+          sfbandpass flo=3
+          '''%par)
+     awe.cdartm2d('zoi'+tag,'zod'+tag,'rr','vel','',par)
+     Result(     'zoi'+tag,wplot.igrey2d('',par))
+
+# ------------------------------------------------------------
+# scan velocities
+nvel=5
+mvel=(nvel-1)/2
+dvel=0.05
+for ivel in range(nvel):
+     vtag = '-%02d'%ivel
+     vscl = 1 + (ivel-mvel)*dvel
+     Flow('vel'+vtag,'vel','scale rscale=%g'%vscl)
+     
+for js in range(ns):
+     tag='%02d'%js
+     
+     for ivel in range(nvel):
+          vtag = '-%02d'%ivel
+          awe.cdartm2d('zoi'+tag+vtag,'zod'+tag,'rr','vel'+vtag,'',par)
+          
+     # plot images on common scale
+     Flow('zoiall'+tag,['zoi'+tag+'-%02d'%ivel for ivel in range(nvel)],
+          '''
+          cat axis=3 space=n ${SOURCES[1:%d]} |
+          byte gainpanel=a pclip=99.9
+          '''%nvel)
+     
+     for ivel in range(nvel):
+          vtag = '-%02d'%ivel
+          Plot('zoi'+tag+vtag,
+               'zoiall'+tag,
+               'window n3=1 f3=%d |'%ivel
+               + wplot.igrey2d('',par))
+          Result('zoi'+tag+vtag,['zoi'+tag+vtag,'rr','ss'+tag],'Overlay')
+       
+#  ------------------------------------------------------------  
+End()
+        

@@ -1,0 +1,34 @@
+\section{Introduction}
+
+Waves in the subsurface are caused by sources that generate a perturbation in the medium. Waves propagate in the medium until they reach receivers that could be located either on the surface, or in boreholes. The objective of seismic exploration is to use these observations in order to characterize the medium.
+
+We can define two types of experiments distinguished by our knowledge about the seismic source:
+\begin{enumerate}
+\item \textbf{Passive experiments} -- the source exists in the subsurface at an unknown position and it is activated at an unknown time. Our objective is to locate the source and perhaps to find the time when it was activated. 
+\item \textbf{Active experiments} -- the source exists at the surface at a known position and is activated at a known time. Our objective is to identify places in the subsurface where discontinuities of physical properties are present.
+\end{enumerate}
+In both cases, we observe data at a (large) number of receivers which act like a \textbf{seismic antenna}. The placement and size of the antenna control our ability to either locate the sources (for passive experiments), or to locate the discontinuities in the medium (for active experiments).
+
+Achieving our imaging objective requires that we can simulate how waves propagate in the subsurface. That means that we know three things:
+\begin{itemize}
+\item a \textbf{wave equation}, which explains how waves propagate into and how waves interact with a medium, 
+\item a \textbf{source function}, which represents the oscillation we generate in the medium, and
+\item a \textbf{velocity model}, which characterizes the material properties at every location in the medium.
+\end{itemize}
+In this exercise, we assume that we know all three.
+
+As we trigger a source, the distribution of the waves in the medium changes with position and time. As time progresses, waves propagate away from the source until eventually they reach our seismic antenna. Identifying the position of the source implies that we know the state of the waves at the moment the source was triggered. Similarly, identifying the discontinuities in the subsurface implies that we know the state of the waves at various times before they reach the receivers, i.e. at the time they interact with the discontinuities. Thus, an essential component of seismic imaging is our ability to simulate waves both forward in time, and backward in time. We discuss about two operations:
+\begin{enumerate}
+\item \textbf{Modeling} -- wave simulation forward in time, and
+\item \textbf{Imaging} -- wave simulation backward in time.
+\end{enumerate} 
+In this exercise, we will do both.
+
+The main question we are addressing is the following: What is the optimal distribution of receivers that would allow us to image the interior of the Earth. In other words, we would like to know how we should deploy our antenna in order to have the best view in the subsurface. Answering this question depends on many constraints:
+\begin{itemize}
+\item \textbf{Logistical} -- we cannot deploy receivers at every location on the surface, either because the equipment is limited, or because we need to avoid obstacles.
+\item \textbf{Economic} -- we do not have an unlimited number of receivers and, even if we did, we do not have unlimited funds to execute an unlimited survey.
+\item \textbf{Geologic} -- we cannot send seismic waves everywhere in the subsurface, because the geologic structure is variable and distributes the waves unevenly in the subsurface.
+\end{itemize}
+In this exercise we can manipulate the seismic antenna at will and explore our ability to see inside the Earth.
+ 

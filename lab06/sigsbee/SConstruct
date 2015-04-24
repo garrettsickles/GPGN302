@@ -1,0 +1,76 @@
+from rsf.proj import *
+import sigsbee,wplot,encode,wei,adcig,zomig
+
+# ------------------------------------------------------------
+# returns global shot index
+def ind2str(js,par):
+    return 'S%03d'%(par['fs']+js*par['js'])
+
+# ------------------------------------------------------------
+# get Sigsbee parameters
+par=sigsbee.param()
+sigsbee.migpar(par)
+
+# plotting parameters
+wplot.param(par)
+
+# migration parameters
+wei.wempar(par)  
+wei.param(par)
+
+# ------------------------------------------------------------
+# read shots
+sigsbee.getdata('data',par)
+sigsbee.makeshots('stmp','data',par)
+
+# bandpass shots
+Flow('sall','stmp','bandpass flo=3 fhi=12')
+
+# ------------------------------------------------------------
+# read velocity
+sigsbee.getstrvel('vstr',par)
+
+# plot velocity
+Result(  'vstr',wplot.igrey2d('color=j allpos=y bias=1.5',par))
+
+# slowness
+wei.slowness('slow','vstr',par)
+
+# datuming slowness
+Flow('sdtm','slow','window squeeze=n n3=2 j3=%(nzdtm)d'%par)
+
+# migration slowness
+Flow('smig','slow','window squeeze=n      f3=%(nzdtm)d'%par) 
+    
+# ------------------------------------------------------------
+# zero-offset data
+# ------------------------------------------------------------
+Flow('zof','sall','window n2=1')
+Result('zof',wplot.dgrey2d('pclip=99',par))
+Flow  ('dip','zof','dip verb=y rect1=60 rect2=20 liter=100 liter=100')
+
+# diffractions
+Flow  ('dif','zof dip',
+       'pwd order=3 dip=${SOURCES[1]} verb=n')
+
+# ------------------------------------------------------------
+# zero-offset migration
+# ------------------------------------------------------------
+for i in ('zof','dif'):
+
+    # plot data
+    Result(i,wplot.dgrey2d('pclip=99',par))
+    
+    # data in the frequency domain
+    encode.time2freq(i,'f'+i,par)
+    
+    # datuming
+    zomig.Adttwo3('d'+i,'f'+i,'sdtm',par)
+    
+    # migration
+    zomig.image('i'+i,'smig','d'+i,par)
+    Result('i'+i,'window | transp |'+wplot.igrey2d('pclip=99',par))
+    
+End()
+
+

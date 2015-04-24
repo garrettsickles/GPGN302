@@ -1,0 +1,147 @@
+\section{Introduction}
+
+The cornerstone of Science is the idea that any experimental result
+can and should be reproduced by independent researchers. This is the
+approach taken in experimental sciences (like Physics, Chemistry or
+Biology), but it is less so in computational sciences. In this class,
+we will do reproducible numeric experiments and produce reproducible
+documents, like the one you are reading now.
+
+We will make use of the following software systems:
+\begin{itemize}
+
+\item \LaTeX, available as free software from
+  \texttt{http://www.latex-project.org}.  LaTeX is a high-quality
+  typesetting system; we will use this system to write reproducible
+  scientific documents.
+
+\item \texttt{scons}, available as free software from
+  \texttt{http://www.scons.org}.  \texttt{scons} (a dialect of Python)
+  is a cross-platform software construction tool which substitutes the
+  classical \texttt{make} utility; we will use this system to control
+  numeric experiments and the reproducibility rules.
+
+\item \mg, available as free software from
+  \texttt{http://www.ahay.org}.  \mg is a software package for
+  multidimensional data analysis and reproducible computational
+  experiments; we will use this system to simulate and process seismic
+  data.
+
+\end{itemize}
+I expect everyone to have a basic understanding of \texttt{Linux} --
+an open-source software platform on which we will execute all numeric
+experiments. I also expect everyone to be familiar with a basic text
+editor, like \texttt{vi} or \texttt{gvim} or \texttt{emacs} or
+\texttt{gedit}, etc.
+
+The basic structure of a lab is the following:
+\begin{verbatim}
+  lab/SConstruct
+  lab/paper.tex
+  lab/intro.tex
+  lab/assignment.tex
+  lab/example1/SConstruct
+  lab/example2/SConstruct
+\end{verbatim}
+The lab directory contains the files used to make the reproducible
+documents, e.g. \texttt{paper.tex}, \texttt{intro.tex} and
+\texttt{assignment.tex}. The example directories contain the rules for
+numeric experiments documented in files named
+\texttt{SConstruct}. These control the program \texttt{scons} which
+runs \mg programs in sequence. For all labs, the usual flow of
+operations is the following:
+%
+\begin{enumerate}
+%
+\item Setup the lab using the information provided in the handout.
+%
+\item Go to the lab directory and edit the file \texttt{paper.tex} to
+  add your name, remove the setup content and add your answers in the
+  file \texttt{assignment.tex}.
+%
+\item Go to the example directories to build figures documenting your
+  numeric experiments -- here you edit the file \texttt{SConstruct}
+  and run some of the following commands:
+%
+  \begin{itemize} 
+    % 
+  \item \texttt{scons} -- will generate all reproducible results by
+    running programs in order. No figure will be displayed on screen
+    during this execution. At the completion of this command, all
+    figures will be available in the \texttt{Fig} directory. Use this
+    command for programs that take a long time to execute.
+    % 
+  \item \texttt{scons view} -- is similar to the simple \texttt{scons}
+    command, except that figures are displayed on screen as soon as
+    they are created. Use this command while you develop and/or debug
+    your scripts.
+    % 
+  \item \texttt{scons blah.view} -- is similar to \texttt{scons view},
+    except that only one result, named \texttt{blah}, is produced and
+    displayed on screen as soon as processing is complete.
+    % 
+  \item \texttt{scons lock} -- is similar to the simple \texttt{scons}
+    command, except that all reproducible figures are ``locked away''
+    at the completion of the run. Use this command to prepare figures
+    to be included in the reproducible documents built with \LaTeX.
+    % 
+  \item \texttt{scons -c} -- will clean all temporary files. Use this
+    command at the end of the lab to clean-up your directory and avoid
+    filling-up your disk quota.
+    % 
+  \end{itemize}
+%
+\item Return to the lab directory and build your document using the
+  commands \texttt{scons paper.read} or \texttt{scons read}. This will
+  build a PDF document and open it on screen using a PDF reader. This
+  is the document you will submit at the completion of the lab.
+\end{enumerate}
+
+All files named \texttt{SConstruct} in the example directories make
+use or Python-like functions. The most common functions are the
+following:
+\begin{itemize}
+\item \texttt{Flow} -- used to control the input and output to various
+  processing commands. The usual syntax is:
+  \begin{center}
+    \texttt{Flow(output,input,command)}
+  \end{center}
+
+\item \texttt{Result} -- use to generate plots which are either
+  displayed on screen using the command \texttt{scons view} or which
+  are ``locked away'' using the command \texttt{scons lock}. The usual
+  syntax is
+  \begin{center}
+    \texttt{Result(result,input,command)}
+  \end{center}
+  The figure \texttt{result} is available in the \texttt{Fig}
+  directory. Sometimes the name of the input file is the same as the
+  name of the result figure. In this case, the command could be
+  \begin{center}
+    \texttt{Result(result,command)}
+  \end{center}
+  
+\item \texttt{Plot} -- used to generate temporary plots which could be
+  overlain with other plots, or combined to form results.  The usual
+  syntax is
+  \begin{center}
+    \texttt{Plot(plot,input,command)}
+  \end{center}
+  The figure \texttt{plot} is available in the current working
+  directory.  Sometimes the name of the input file is the same as the
+  name of the plot. In this case, the command could be
+  \begin{center}
+    \texttt{Plot(plot,command)}
+  \end{center}
+
+\end{itemize}
+
+All \mg data are regularly-sampled multidimensional hypercubes, and
+the data files have extension \texttt{.rsf}. All figures produced
+using \mg~are in a format called \texttt{vplot} and the files have the
+extension \texttt{.vpl}. Once a figure is generated, it can be
+visualized using the program \texttt{xtpen}.  The usual syntax is:
+  \begin{center}
+    \texttt{xtpen file1.vpl [file2.vpl \dots]}
+  \end{center}
+ 

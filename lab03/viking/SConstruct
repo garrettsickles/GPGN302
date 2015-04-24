@@ -1,0 +1,97 @@
+## 
+ # Viking Graben Example
+ ##
+
+from rsf.proj import *
+import viking,wplot
+
+par=viking.param()
+wplot.param(par)
+
+# ------------------------------------------------------------
+# get raw traces
+viking.gettraces('traces',par)
+# ------------------------------------------------------------
+
+# ------------------------------------------------------------
+# naming conventions:
+# shot - complete shot
+# scut - shots with a cut
+
+# ------------------------------------------------------------
+# get all shots
+viking.makes('shot','traces',par)
+
+# ------------------------------------------------------------
+# hide shots using a mask: (1=offset,2=shot)
+# mask along offset: set k1 and l1
+# mask along shots:  set k2 and l2 
+# k=start index, l=end index
+#
+# example: k1=60 l1=120, k2=1 l2=250
+#          mask offsets with indices 60-120 AND shots with indices 1-250
+#
+#
+# Default:
+#   n1=%(no)g d1=%(oo)g d1=%(do)g k1=40,30  l1=105,70
+#   n2=%(ns)g d2=%(os)g d2=%(ds)g k2=50,350 l2=90,750
+#
+# the number of offsets is 120
+# the number of shots   is 1012
+# look in viking.py for more data sampling parameters
+
+Flow('mone',None,
+     '''
+     spike nsp=2 mag=1,1
+     n1=%(no)g d1=%(oo)g d1=%(do)g k1=80,20  l1=90,70
+     n2=%(ns)g d2=%(os)g d2=%(ds)g k2=50,200 l2=700,600 |
+     math output="1-input"
+     '''%par)
+Flow('mask','mone',
+     '''
+     spray axis=1 n=%(nt)d o=%(ot)g d=%(dt)g
+     '''%par)
+
+# ------------------------------------------------------------
+# mask shots
+viking.hideshots('scut','shot','mone','mask',par)
+# ------------------------------------------------------------
+
+# ------------------------------------------------------------
+# regroup traces after mask
+viking.masktraces('subset','scut',par)
+# ------------------------------------------------------------
+
+# ------------------------------------------------------------
+# make cmps
+# cmps - CMPs from all shots
+# ccut - CMPs from cut shots
+viking.makec('cmps','traces',par)
+viking.makec('ccut','subset',par)
+# ------------------------------------------------------------
+
+# ------------------------------------------------------------
+# make fold
+# fold - fold from all shots
+# fcut - fold from cut shots
+viking.makef('fold','cmps',par)
+viking.makef('fcut','ccut',par)
+# ------------------------------------------------------------
+
+# ------------------------------------------------------------
+for f in (['shot','scut','cmps','ccut']):
+    Flow(f+'-byte',f,
+         'window max1=3 | tpow tpow=2 | byte gainpanel=a pclip=99')
+
+for i in range(25):
+    tag = "-%02d"%i
+
+    Result('shot'+tag,'shot-byte','window n3=1 min3=%g |'%i+viking.cmpgrey('screenratio=1.0',par))
+    Result('scut'+tag,'scut-byte','window n3=1 min3=%g |'%i+viking.cmpgrey('screenratio=1.0',par))
+
+    Result('cmps'+tag,'cmps-byte','window n3=1 min3=%g |'%i+viking.cmpgrey('screenratio=2.0 xll=1.7',par))
+    Result('ccut'+tag,'ccut-byte','window n3=1 min3=%g |'%i+viking.cmpgrey('screenratio=2.0 xll=1.7',par))
+
+
+End()
+

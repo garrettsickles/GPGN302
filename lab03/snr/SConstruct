@@ -1,0 +1,83 @@
+## 
+ # SNR
+ ##
+from rsf.proj import *
+import wplot
+
+par = dict(
+    nt=500, ot=0, dt=0.004, lt='t', ut='s',  # t
+    nx=40,  ox=0, dx=1,     lx='',  ux='',  # x
+    frq=25
+)
+wplot.param(par)
+par['labelattr']=par['labelattr'] + 'screenratio=2 screenht=10 xll=+2'
+
+# trace
+Flow('wav',None,
+     '''
+     spike nsp=1 mag=1
+     n1=%(nt)d o1=%(ot)g d1=%(dt)g k1=250 |
+     put label1=%(lt)s unit1=%(ut)s |
+     pad n1out=1000 |
+     ricker1 frequency=%(frq)g |
+     window n1=%(nt)d |
+     scale axis=123
+     '''%par)
+
+# ------------------------------------------------------------
+# noise
+Flow('noi','wav',
+     '''
+     math output=0 |
+     spray axis=2 n=%(nx)d o=%(ox)g d=%(dx)g |
+     noise |
+     pad n1out=1000 |
+     ricker1 frequency=%(frq)d |
+     window n1=%(nt)d |
+     scale axis=123 |
+     scale rscale=2.0
+     '''%par)
+Result('noi',wplot.dgrey2d('min2=-1 max2=%(nx)d'%par,par))
+
+for ix in range(par['nx']):
+     tag = "-%02d"%ix
+     
+     # signal
+     Flow('sig'+tag,'wav',
+          '''
+          spray axis=2 n=%d o=0 d=1 |
+          pad n2out=%d
+          '''%(ix+1,par['nx']))
+
+     # noise
+     Flow('noi'+tag,'noi',
+          'window n2=%d | pad n2out=%d'%(ix+1,par['nx']))
+
+     # data
+     Flow('dat'+tag,['sig'+tag,'noi'+tag],
+          'add ${SOURCES[1]}')
+     
+     # stack
+     Flow('stk'+tag,'dat'+tag,'stack axis=2 norm=y')
+
+Flow('dat-byt',['dat-%02d'%ix for ix in range(par['nx'])],
+     'cat axis=3 space=n ${SOURCES[1:%d]} | byte gainpanel=a pclip=100'%(par['nx']))
+Flow('sig-byt',['sig-%02d'%ix for ix in range(par['nx'])],
+     'cat axis=3 space=n ${SOURCES[1:%d]} | byte gainpanel=a pclip=100'%(par['nx']))
+
+for ix in range(par['nx']):
+     tag = "-%02d"%ix
+
+     Result('sig'+tag,'sig-byt',
+            'window n3=1 f3=%d |'%ix
+            + wplot.dgrey2d('min2=-1 max2=%(nx)d'%par,par))
+     Result('dat'+tag,'dat-byt',
+            'window n3=1 f3=%d |'%ix
+            + wplot.dgrey2d('min2=-1 max2=%(nx)d'%par,par))
+
+Flow('stk',['stk-%02d'%ix for ix in range(par['nx'])],
+     'cat axis=2 space=n ${SOURCES[1:%d]}'%(par['nx']))
+Result('stk',wplot.dgrey2d('min2=-1 max2=%(nx)d'%par,par))
+
+End()
+

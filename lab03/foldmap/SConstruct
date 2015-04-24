@@ -1,0 +1,96 @@
+## 
+ # Fold Map
+ ##
+
+from rsf.proj import *
+import cmplot,wplot
+
+par = dict(
+    nt=1,   ot=0, dt=0.004, lt='t', ut='s',  # t
+    nz=10,  oz=0, dz=10,    lz='z', uz='m',  # z
+    nx=25,  ox=0, dx=10,    lx='x', ux='m',  # x
+    ns=10,   os=0, ds=15,   ls='s', us='m',  # shots
+    no=24,   oo=0, do=10,    lo='o', uo='m'   # offset
+)
+cmplot.param(par)
+wplot.param(par)
+    
+# ------------------------------------------------------------
+Flow('shot',None,
+     '''
+     spike nsp=1 mag=1
+     n1=%(nt)d o1=%(ot)g d1=%(dt)g label1=%(lt)s unit1=%(ut)s
+     n2=%(no)d o2=%(oo)g d2=%(do)g label2=%(lo)s unit2=%(uo)s
+     n3=%(ns)d o3=%(os)g d3=%(ds)g label3=%(ls)s unit3=%(us)s |
+     math output="%(ds)g + x3" |
+     scale axis=123
+     '''%par)
+Result('shot','window |'+ cmplot.osall(par))
+
+Flow('traces','shot','put n2=%d n3=1'%(par['no']*par['ns']))
+
+# ------------------------------------------------------------
+# shot coordinates
+Flow('sco',None,
+     '''
+     math output="x2"
+     n1=%(no)d o1=%(oo)g d1=%(do)g
+     n2=%(ns)d o2=%(os)g d2=%(ds)g |
+     '''%par +'put n2=1 n1=%d'%(par['ns']*par['no']))
+
+# offset coordinates
+Flow('oco',None,
+     '''
+     math output="x1"
+     n1=%(no)d o1=%(oo)g d1=%(do)g
+     n2=%(ns)d o2=%(os)g d2=%(ds)g |
+     '''%par +'put n2=1 n1=%d'%(par['ns']*par['no']))
+
+# midpoint coordinates
+cmplot.mco('mco','sco','oco',par)
+
+# half-offset coordinates
+cmplot.hco('hco',      'oco',par)
+
+# midpoint indices
+Flow('imco','mco','math output="input/%g"'%(par['do']/2))
+
+# half-offset indices
+Flow('ihco','hco','math output="input/%g"'%(par['do']/2))
+Flow('mhco',['ihco','imco'],
+     'cat axis=2 space=n ${SOURCES[1]} | transp | dd type=int')
+
+# CMP
+Flow('cmps',['traces','mhco'],
+     '''
+     intbin head=${SOURCES[1]} xkey=0 ykey=1 |
+     put                 unit1=%(ut)s label1=%(lt)s 
+     o2=%(oh)g d2=%(dh)g unit2=%(uh)s label2=%(lh)s
+     o3=%(om)g d3=%(dm)g unit3=%(um)s label3=%(lm)s
+     '''%par)
+Result('cmps','window |' + cmplot.hmall(par))    
+# ------------------------------------------------------------
+
+Flow('fold','cmps',
+     '''
+     window |
+     scale axis=123 |
+     math output="abs(input)" |
+     mask min=1e-6 max=1 |
+     dd type=float
+     '''%par)
+Result('fold',cmplot.hmall(par))
+
+Result('foldPR',
+       'fold',
+       '''
+       stack axis=1 norm=n |
+       graph title="" plotfat=10 symbol=*
+       wherexlabel=t screenratio=%(hmratio)g screenht=%(hmheight)g
+       label2="fold" unit2=""     min2=0 max2=10
+       label1=%(lm)s unit1=%(um)s min1=%(xmin)g max1=%(xmax)g
+       %(labelattr)s %(labelrot)s
+       '''%par)
+
+End()
+

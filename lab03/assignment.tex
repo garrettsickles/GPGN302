@@ -1,0 +1,84 @@
+\section{Assignment}
+
+% ------------------------------------------------------------
+\subsection{\texttt{foldmap} example}
+% ------------------------------------------------------------
+\inputdir{foldmap}
+% ------------------------------------------------------------
+
+\multiplot{2}{shot,cmps,fold,foldPR}{width=0.45\textwidth}{(a) Shot geometry, (b) CMP geometry and (c) fold map and (d) fold.}
+
+In \rfgs{shot}-\rfn{foldPR} you see a map of shot coordinates (color coded) represented in shot-offset coordinates ($\ss$-$\oo$) and in midpoint-half offset coordinates ($\mm$-$\ho$).
+\begin{enumerate}
+\item Explore the behavior of the fold map as you change the acquisition parameters. What happens if you double the number of shots by reducing the shot spacing? What happens if you double the acquisition offset by increasing the number of receivers at the same spacing? Motivate your answers.
+\item Change the parameters in the \texttt{SConstruct} to represent an acquisition geometry with:
+\begin{itemize}
+\item $10$ shots sampled at every $15$~m
+\item $25$ receivers sampled at every $10$~m from the shot.
+\end{itemize}
+What is the maximum fold? Explain how you find the answer, then verify that your answer matches the numeric example. 
+\item Change the parameters in the \texttt{SConstruct} to achieve a uniform fold of $8$ for as much as possible in the middle of the  survey. Include new figures in your report and explain how you achieve this result. (``Trial an error'' is not an acceptable answer!)
+\end{enumerate}
+
+\subsection{\texttt{foldmap} discussion}
+\begin{enumerate}
+
+%Explore the behavior of the fold map as you change the acquisition parameters. What happens if you double the number of shots by reducing the shot spacing? What happens if you double the acquisition offset by increasing the number of receivers at the same spacing. Motivate your answers.
+
+\item Changing the shot and acquisition parameters in the foldmap's \texttt{SConstruct} file changes the folding of the data and the geometry of the survey. On line 12 of the \texttt{SConstruct} file we can change the paremeters \texttt{ns} and \texttt{ds} to alter the offset in this example. If we double the number of shots by reducing the shot spacing \texttt{ds} to 10 and doubling the number of shots \texttt{ns} to 10 we increase the fold from 1.5 to 3. This means we have doubled our signal to noise ratio which improves the quality of our data. If the number of shots had been doubled but the shot spacing had not been halfed, the fold of the survey would have remained 1.5. On line 13 of the \texttt{SConstruct} we can change the parameters \texttt{no} and \texttt{do} to alter the acquisition spacing in this example. We can double the acquisition offset by increasing the number of recievers at the same spacing by doubling the parameter \texttt{no} and halfing \texttt{do}. This causes our folding to remain the same at 1.5.
+
+% Change the parameters in the SConstruct to represent an acquisition geometry with:
+%   10 shots sampled at every 15m
+%   25 receivers sampled at every 10m from the shot
+% What is the maximum fold? Explain how you find the answer, then verify that your answer matches the numeric example.
+
+\item  The maximum fold after changing the shot pattern to 10 shots sampled at every 15 m is 2 whereas the maximum fold after changing the receiver pattern to 25 receivers sampled at every 10m from the shot is 5. If both of these alterations to the shot and receiver patterns exist simultaneously the maximum fold increases to some value between 8 and 9. By increasing the number of shots to 20 we begin to see a pattern of two eights for every nine. This 2:1 ratio means the maximum fold is $8.\bar{33}$. This also means the number of shots does not alter the maximum folding of the data.
+
+% Change the parameters in the SConstruct to achieve a uniform fold of 8 for as much as possible in the middle of the survey. Include new figures in your report and explain how you achieve this result. (“Trial an error” is not an acceptable answer!)
+
+\item To achieve a uniform fold of 8 in the middle of figure \rfn{foldPR} I set the number of shots to 30, the shot spacing to 15, the number of recievers to 24, and the receiver spacing to 10. This yields a max fold of 8. This is the case because from our experience in the previous examples we can easily identify that that the number of shots does not influence the max fold of a survey. This means there are only three variables which influence the max fold of a given survey. After changing the variables values numerous times and observing how each one influences the max fold I arrived at the equation 
+\begin{align*}
+\emph{Max Fold} = \frac{(\textrm{Receiver Spacing})(\textrm{Number of Receivers})}{2(\textrm{Shot Spacing})}
+\end{align*}
+to describe the max fold of a given survey survey geometry. This equation is not dependent on the of shots and only relies on the receiver spacing, the shot spacing, and the number of receivers.
+
+\end{enumerate}
+\pagebreak
+
+% ------------------------------------------------------------
+\subsection{\texttt{viking} example}
+% ------------------------------------------------------------
+\inputdir{viking}
+% ------------------------------------------------------------
+\multiplot{1}{shotQCall,cmpsQCall,foldQCall,foldPRall}{width=0.8\textwidth}{Full data set example. Time slice in (a) shot coordinates, (b) midpoint coordinates. (c) Fold map and (d) total fold as a function of midpoint.}
+\multiplot{1}{scutQCall,ccutQCall,fcutQCall,fcutPRall}{width=0.8\textwidth}{Windowed dataset example. Time slice in (a) shot coordinates, (b) midpoint coordinates. (c) Fold map and (d) total fold as a function of midpoint.}
+
+\multiplot{1}{shot-10,scut-10}{width=0.60\textwidth}{ Common-shot gathers (CSG) (a) with all traces and (b) with traces removed.}
+\multiplot{1}{cmps-10,ccut-10}{width=0.30\textwidth}{ Common-midpoint gathers (CMP) (a) with all traces and (b) with traces removed.}
+
+In \rfgs{shotQCall}-\rfn{foldPRall} you see figures similar to the ones in the \texttt{foldmap} example, but for the Viking Graben data. \rFgs{scutQCall}-\rfn{fcutPRall} show another example, but with many of the traces removed. The \texttt{SConstruct} allows you to remove traces for various shot or offset ranges. The original data have $120$ traces per shot, the shots are separated by $25$~m and the receivers are separated by $25$~m.
+\begin{enumerate}
+\item Check the parameters in the \texttt{SConstruct} and explain the maximum fold observed in the example with all traces.
+\item Modify the mask used to remove traces from the data. Describe an acsuisition setup which motivates your mask. For example, you could remove shots or you could remove offsets for some shots, or both. Compare the examples with and without the mask and explain the changes to the fold.
+\item Explain the differences between the common-shot gather in \rfg{shot-10} and the common-midpoint gather in \rfg{cmps-10}. Use what you learned in the \texttt{foldmap} example to discuss the offset range and the sampling as a function of offset. Compare the complete dataset, \rFgs{shot-10}-\rfn{cmps-10}, with the windowed dataset, \rFgs{scut-10}-\rfn{ccut-10}.
+\end{enumerate}
+
+\pagebreak
+\subsection{\texttt{viking} discussion}
+%The original data have 120 traces per shot, the shots are separated by 25m and the receivers are separated by 25m
+\begin{enumerate}
+
+% Check the parameters in the SConstruct and explain the maximum fold observed in the example with all traces
+\item The maximum fold observed in the example with all traces in figure appears to be 60 \rfn{foldPRall}. Additonally, from the \texttt{SConstruct} file in the viking data we know the number of offsets is 120 and the number of shots is 1012. Fortunately from our analysis in the \texttt{foldmap} discussion we know the the number of shots does influence the max fold of a survey. We can use the formula derived in question 3 of the \texttt{foldmap} discussion to calculate the max fold as seen below.
+\begin{align*}
+\emph{Max Fold} = \frac{(\textrm{Receiver Spacing})(\textrm{Number of Receivers})}{2(\textrm{Shot Spacing})} = \frac{(25 m)(120)}{2(25 m)} = 60
+\end{align*}
+The max fold observed in figure \rfn{foldPRall} and the max fold calculated using the formula for this scenario are both 60 so the maximum fold for the example with all traces is clearly 60.
+
+% Modify the mask used to remove traces from the data. Describe an acsuisition setup which motivates your mask. For example, you could remove shots or you could remove offsets for some shots, or both. Compare the examples with and without the mask and explain the changes to the fold
+\item By modifying the values of \texttt{k1}, \texttt{l1}, \texttt{k2}, and \texttt{l2} in the \texttt{SConstruct} file within the \texttt{viking} directory we can alter the mask and remove specific traces from the data. My mask models a scenario where there is an airport we are not able to collect data on, shown in figure \rfn{scutQCall}. This mask significantly alters the folding of the data. The fold of the data without the airport mask can be seen in figure \rfn{foldPRall} and the fold of the data with the mask can be seen in figure \rfn{fcutPRall}. Both of these fold lines increase to the same maximum fold of 60 within the first to kilometers of the boundary of the survey. \\ \\The major differences in the fold pattern of each survey occur as we move past the 5 km mark all the way to the 16 km mark. Within this region the relative maximum fold is 30, half of the maximum fold without the mask. This difference between the two examples is caused by the removal of the offset mask and shot mask produced by the airport. It is also evident that the signal to noise ratio in the vicinity of the mask is four times less than that of the maskless data. This occurs because the average maximum fold in the region of the mask is half of that in the maskless data and the signal to noise ratio is proportional to the square root of the fold.  This negative influence is not optimal and we would prefer to have data that is four times more comprehensive. 
+
+% Explain the differences between the common-shot gather in Figure 7(a) and the common-midpoint gather in Figure 8(a). Use what you learned in the foldmap example to discuss the offset range and the sampling as a function of offset. Compare the complete dataset, Figures 7(a)-8(a), with the windowed dataset, Figures 7(b)-8(b)
+
+\item The major difference between the common-shot gather in figure \rfn{shot-10} and the common-midpoint gather in figure \rfn{cmps-10} is the shape and offset of each type of survey. The common-shot gather covers the comlplete extent of the area in figure \rfn{shotQCall} where as the common-midpoint gather does not seem to cover the same spatial extent. In fact they both cover the same region and consist of the same data. The common-midpoint gather is plotted as a function of the half offset where as the common-shot gather is plotted as a function of the offset. This causes the data to appear less extensive and skewed while in reality it essentially covers the same extent. Additionally, the common-shot gather data in figure \rfn{shot-10} is easier to interpret than the common-midpoint data in figure \rfn{cmps-10}. The reflectors in figure \rfn{cmps-10} are pixelated and discontinuous in comparison to the reflectors in figure \rfn{shot-10}. The masked datasets seen in figures \rfn{scut-10} and \rfn{ccut-10} illustrate the influence of the mask on the seismic image. The mask causes both of these images to be equally limited in extent. In figure \rfn{scut-10} the mask removes 1.5 km of data and in figure \rfn{ccut-10} the mask removes 0.75 km of data. The masks are detrimental to the seismic data and negatively impact the quality and spatial extent of the data. In order to obtain a comprehensive seismic image there must not be significant masks like those in the \texttt{viking} example in the lab.
+\end{enumerate}

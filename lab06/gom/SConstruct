@@ -1,0 +1,143 @@
+from rsf.proj import *
+import wplot,zomig,encode
+
+par = dict(
+    nz=600, dz=0.00667, oz=0,      lz='z', uz='km',
+    nx=891, dx=0.02667, ox=2.9337, lx='x', ux='km',
+    ny=1,   dy=0.02667, oy=0,      ly='y', uy='km',
+    nt=1000,dt=0.004,   ot=0,      lt='t', ut='s',
+    nw=96,  jw=1,       ow=5,
+    verb='y',eps=0.01,nrmax=1,dtmax=0.00005,
+    tmx=32,tmy=0,pmx=32,pmy=0,incore='y'
+    )
+par['tmin']=1.25
+par['zmin']=1.00
+wplot.param(par)
+par['dratio2d']=0.5
+par['dheight2d']=7
+par['iratio2d']=0.5
+par['iheight2d']=7
+
+# ------------------------------------------------------------
+# data taper
+# ------------------------------------------------------------
+Flow('tap',None,
+     '''
+     spike nsp=2 mag=1,1
+     n1=%(nt)d o1=%(ot)g d1=%(dt)g k1=1,1 l1=750,900
+     n2=%(nx)d o2=%(ox)g d2=%(dx)g k2=1,601 l2=600,%(nx)d |
+     smooth rect1=150 rect2=150
+     '''%par)
+Result('tap',wplot.dgrey2d('',par))
+
+# ------------------------------------------------------------
+# near offset data (use as "zero offset")
+# ------------------------------------------------------------
+Flow('tzo',None,
+     'window <%s |'%'./DATA/gom/gom.noff.hh' +
+     '''
+     window n1=%(nt)d |
+     bandpass fhi=20 |
+     window min2=%(ox)g n2=%(nx)d |
+     put label1=%(lt)s unit1=%(ut)s label2=%(lx)s unit2=%(ux)s
+     '''%par)
+Flow('zof','tzo tap','add mode=p ${SOURCES[1]}')
+Result('zof',wplot.dgrey2d('pclip=99.9',par))
+
+# ------------------------------------------------------------
+# dominant dip
+# ------------------------------------------------------------
+Flow  ('dip','zof','dip verb=y rect1=60 rect2=20 liter=100 liter=100')
+Result('dip',wplot.dgrey2d('mean=y color=e',par))
+
+# ------------------------------------------------------------
+# diffractions
+# ------------------------------------------------------------
+Flow  ('dif','zof dip tap',
+       'pwd order=3 dip=${SOURCES[1]} verb=n | add mode=p ${SOURCES[2]}')
+Result('dif',wplot.dgrey2d('pclip=99.9',par))
+
+# ------------------------------------------------------------
+# velocity
+# ------------------------------------------------------------
+Flow('vel',None,
+     'window <%s |'%'./DATA/gom/gom.velo.hh' +
+     '''
+     smooth rect1=100 rect2=100 | 
+     put label1=%(lz)s unit1=%(uz)s
+     o2=%(ox)g d2=%(dx)g label2=%(ux)s unit2=%(ux)s
+     '''% par)
+Result('vel',wplot.igrey2d('mean=y color=j',par))
+
+# ------------------------------------------------------------
+# slowness
+# ------------------------------------------------------------
+zomig.slowness('slo','vel',par)
+
+# datuming slowness
+Flow('sdtm','slo','window squeeze=n n3=2 j3=150')
+# migration slowness
+Flow('smig','slo',
+     '''
+     window squeeze=n f3=150 |
+     window squeeze=n n3=%d
+     '''%(par['nz']-150))
+Result('smig','window | transp |'
+       +wplot.igrey2d('mean=y color=j',par))
+
+# ------------------------------------------------------------
+# depth migration
+# ------------------------------------------------------------
+
+# ------------------------------------------------------------
+for i in ('zof','dif'):
+
+     # data in the frequency domain
+     encode.time2freq(i,'f'+i,par)
+
+     # datuming
+     zomig.Adttwo3('d'+i,'f'+i,'sdtm',par)
+    
+# ------------------------------------------------------------
+# generate slowness model by scaling
+
+ns=13   # number of slownesses
+ds=0.05 # fractional change of the slowness
+for js in range(ns):
+    s=1+(js-(ns-1)/2)*ds # slowness scaling factor
+    tag = "-%03d"%(100*s)
+    Flow('slo'+tag,'smig','scale rscale=%g'%s)
+
+# ------------------------------------------------------------
+# migration with different slownesses
+for i in ('zof','dif'):
+     for js in range(ns):
+        s=1+(js-(ns-1)/2)*ds # slowness scaling factor
+        tag = "-%03d"%(100*s)
+        zomig.image('i'+i+tag,'slo'+tag,'d'+i,par)
+
+     # gain images together
+     Flow('i'+i+'byte',
+          ['i'+i+'-%03d'%(100*(1+(js-(ns-1)/2)*ds)) for js in range(ns)],
+          '''
+          cat axis=2 space=n ${SOURCES[1:%d]} |
+          transp plane=23 | transp plane=12 |
+          byte gainpanel=a pclip=99.9
+          '''%ns)
+
+     # plot images
+     for js in range(ns):
+         s=1+(js-(ns-1)/2)*ds
+         tag = "-%03d"%(100*s)
+
+         # full image
+         Result('i'+i+tag,'i'+i+'byte',
+                'window n3=1 f3=%d |'%js
+             + wplot.igrey2d('',par))
+
+         # zoom image
+         Result('z'+i+tag,'i'+i+'byte',
+               'window n3=1 f3=%d min2=20 max2=23 |'%js
+            + wplot.igrey2d('min2=20 max2=23 screenratio=1 screenht=10',par))
+         
+End()

@@ -1,0 +1,129 @@
+# 
+# "Exploding reflector" imaging
+#
+from rsf.proj import *
+import sigsbee,geom,awe,wplot
+
+# ------------------------------------------------------------
+par=sigsbee.paramwin() # Sigsbee2A parameters
+
+# ****AMENDED FOR LAB 01**** ---------------------------------
+# Time Delay - par['nt']=2000
+# ------------------------------------------------------------
+
+wplot.param(par);      # plotting parameters
+awe.param(par)       
+ne=1 # number of experiments
+
+# ------------------------------------------------------------
+# source coordinates (n=number, o=origin, d=sampling rate)
+
+geom.boxarray2d('ss',
+               4,2.5,1.0, # coordinates on z (n,o,d)
+               9,6.0,1.0, # coordinates on x (n,o,d)
+               par)
+               
+# plot sources
+Plot('ss',wplot.ssplot2d('',par))
+
+# ------------------------------------------------------------
+# receiver coordinates
+geom.horizontal2d('tt',par['oz']+10*par['dz'],'',par)
+
+# ------------------------------------------------------------
+# Default
+Flow('rr0','tt','window min2=6 max2=9 j2=20'%par)
+
+
+# ****AMENDED FOR LAB 01**** ---------------------------------
+# Wide - Flow('rr0','tt','window min2=6 max2=14 j2=20'%par)
+# Narrow - Flow('rr0','tt','window min2=6 max2=7.5 j2=20'%par)
+# Sparse - Flow('rr0','tt','window min2=6 max2=9 j2=10'%par)
+# Dense - Flow('rr0','tt','window min2=6 max2=9 j2=40'%par)
+# ------------------------------------------------------------
+
+# plot receivers
+for ie in range(ne):
+       etag='%d'%ie
+       Plot('rr'+etag,wplot.rrplot2d('plotfat=10',par)) 
+
+# ------------------------------------------------------------
+# get velocity
+sigsbee.getstrvelwin('vstr',par)
+
+# smooth velocity (average in a rectangular window)
+Flow('velo','vstr',
+     'smooth rect1=25 rect2=25 repeat=1')
+
+# plot velocity
+Plot('velo',wplot.igrey2d('mean=y',par))
+
+for ie in range(ne):
+       etag='%d'%ie
+       Result('velo'+etag,['velo','ss','rr'+etag],'Overlay')
+
+# density
+Flow('dens','velo','math output=1')
+
+# ------------------------------------------------------------
+# construct source wavelet (frequency in Hz)
+awe.wavelet('wav',10,'',par)    
+
+# plot wavelet
+Result('wav','window |'+ wplot.waveplot('',par)) 
+
+# ------------------------------------------------------------
+for ie in range(ne):
+       etag='%d'%ie
+
+       # run FD modeling
+       awe.awefd2d('temp'+etag,      # data 
+                    'wfld'+etag,     # wavefield 
+                    'wav',           # wavelet 
+                    'velo',          # velocity 
+                    'dens',          # density 
+                    'ss',            # source coordinates
+                    'rr'+etag,       # receiver coordinates
+                    'fsrf=n expl=y', # optional parameters
+              par)
+
+       # remove wavelet delay from data
+       Flow('data'+etag, # data w/o wavelet delay
+            'temp'+etag, # data w/  wavelet delay
+            '''
+            window squeeze=n f2=%(kt)d |
+            pad end2=%(kt)d |
+            put o2=%(ot)g
+              ''' %par)
+
+       # plot data
+       Result('data'+etag,
+              'window j2=4 | transp|' + wplot.dgrey2d('pclip=99',par))
+       Result('wigl'+etag,'data'+etag,
+              'window j2=4 | transp|' + wplot.dwigl2d('pclip=99',par))
+
+       # plot wavefield frames
+       Flow('wbyt'+etag,'wfld'+etag,'byte gainpanel=a pclip=99')
+       for i in range( int((par['nt']-1)/par['jsnap']) ):
+              ftag = '-%02d'%i
+              Plot(   'wfld'+etag+ftag,'wbyt'+etag,wplot.ifrm2d(i,'',par))
+              Result( 'wfld'+etag+ftag,
+                     ['wfld'+etag+ftag,'ss','rr'+etag],'Overlay')
+              
+       # run FD imaging
+       awe.awertm2d('imag'+etag, # image
+                    'data'+etag, # data
+                    'rr'+etag,   # receiver coordinates
+                    'velo',      # velocity
+                    'dens',      # density
+                    'fsrf=n',    # optional parameters
+                par)
+
+       # plot image
+       Plot(  'imag'+etag,
+              'bandpass flo=2 |'
+              + wplot.igrey2d('pclip=99.9',par))
+       Result('imag'+etag,['imag'+etag,'rr'+etag],'Overlay')
+
+# ------------------------------------------------------------
+End()

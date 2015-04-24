@@ -1,0 +1,55 @@
+\def\basedir{psava/gpgn302}
+
+\blue{
+  \sidebar{
+    \section{Setup}
+    \begin{itemize}
+    \item Source your \texttt{.bashrc} file to make sure that you have
+      all your environment variables set:\\
+      \texttt{source $\sim$/.bashrc}
+    \item Change to the class directory:\\
+      \texttt{cd $\sim$/gpgn302}
+    \item Copy the current lab:\\
+      \texttt{cp -r $\sim$\basedir/\thisdoc \; .} \\
+      Mind the dot at the end of the command.
+    \item Change to the lab directory:\\
+      \texttt{cd \thisdoc}
+    \item Open the file \texttt{paper.tex} with your favorite text
+      editor and put your name at the top of the file in the \LaTeX~
+      variable named \texttt{author}.
+    \item Change to the example directories which could be either one
+      of the names listed below:\\
+      \texttt{cd \exedirs}
+    \item Make a directory for your figures:\\
+      \texttt{mkdir /tmp/\$USER} \\
+      The variable \texttt{\$USER} is your username. \\
+      Make a symbolic link to your temp figure directory (repeat for
+      every example):\\
+      \texttt{ln -s /tmp/\$USER Fig} \\
+      This means that your figures which go into \texttt{Fig} actually
+      go to \texttt{/tmp/\$USER}. In this way, you do not fill your
+      home directory which has a pretty small disk quota.
+    \item In a terminal, build and view all figures by running: \\
+      \texttt{scons view} \\
+      Once a figure pops-up on screen, close it by pressing
+      \texttt{Q}. Make sure that your NumLock key is not
+      pressed. \texttt{scons} will then move to the next target. If
+      you would like to build an individual figure called
+      \texttt{myfig}, run \\
+      \texttt{scons myfig.view} 
+    \item Modify the \texttt{SConstruct} as outlined in the
+      assignment. Repeat your figure builds to see how the changes to
+      the setup impact the figures.
+    \item Check all the results to make sure that they are ok. You can
+      do this either by typing \\
+      \texttt{scons view} \\
+      to see all the results in the order in which they are listed in the
+      \texttt{SConstruct} or by typing \\
+      \texttt{xtpen Fig/myfig.vpl} \\
+      where \texttt{myfig} is a specific figure you have created. You can
+      also visualize figures whose name follow a specific pattern with the
+      command \\
+      \texttt{xtpen Fig/myfig*.vpl}
+    \end{itemize}
+  }
+}

@@ -1,0 +1,10 @@
+export DEV=/data/psava
+export RSF=$DEV/rsf
+export RSFSRC=$DEV/rsf
+export RSFROOT=$DEV/rsfroot
+export PATH=$PATH:$RSFROOT/bin
+export PYTHONPATH=$RSFROOT/lib/python2.6/dist-packages:${PYTHONPATH}:$RSF/book/Recipes
+export VPLOTFONTDIR=$RSFROOT/include/
+export DATAPATH=/scratch/$USER/
+export RSFFIGS=$DEV/rsffigs/$USER
+export PSTEXPENOPTS='color=y force=n fat=1 fatmult=1.5 rgb=no serifs=no'

@@ -1,0 +1,80 @@
+\section{Introduction}
+
+Depth imaging requires that we construct a model of the Earth as a
+function of depth. So far, we can evaluated parameters as a function
+of time, i.e. we have worked in the data space. From now on, we make a
+distinction between the following spaces:
+%
+\begin{itemize}
+\item We represent data in the \textbf{data space},
+  e.g. time-position-offset.
+\item We represent images in the \textbf{image space},
+  e.g. depth-position(-offset).
+\end{itemize}
+
+Scanning over data in CMP gathers allows us to evaluate a parameter
+characterizing the hyperbolic moveout of the data. This parameter has
+units of velocity and is called \textbf{stacking velocity}, simply
+because its purpose is to construct the best stack after normal
+moveout (NMO) correction. This parameter depends on the Earth velocity
+through the data moveout, but it is not the velocity at any particular
+point in the Earth. Furthermore, this parameter evaluated at a certain
+time depends on waves propagating through the entire overburden above
+a certain reflector.
+
+For depth imaging, we need to do two operations:
+\begin{enumerate}
+\item Convert the stacking velocity into a velocity characterizing
+  each position in the Earth, i.e. construct an \textbf{interval
+    velocity}.
+\item Place this velocity at the appropriate depth in the Earth.
+\end{enumerate}
+
+%% 
+ % RMS to interval velocity conversion
+ %%
+The relationship between stacking velocities and interval velocities
+is fairly complex, but it can summarized by the following relation
+which is applicable to a layered Earth:
+%
+\beq \label{eqn:INT}
+v_n^2 = \frac{V_n^2 t_n - V_{n-1}^2 t_{n-1}}{t_n - t_{n-1}} \;.
+\eeq
+%
+In \req{INT}, $v_n$ is the interval velocity in layer $n$, $V_n$ and
+$V_{n-1}$ are the stacking velocities for reflectors $n$ and $n-1$,
+and $t_n$ and $t_{n-1}$ are the zero-offset times for the reflectors
+$n$ and $n-1$. Quantities $V$ and $t$ are measurable through the stack
+and picking process discussed in an earlier lab.
+
+Generally speaking, $v^2\oft$ is constructed roughly as the derivative
+of $V^2\oft$. This means that if $V\oft$ is not a smooth function,
+then $v\oft$ is even less smooth. In fact, any small oscillation of
+the stacking velocity $V\oft$ leads to large variations of the
+interval velocity $v\oft$. Therefore, in order to constrain the
+interval velocity to moderate variations, we need to smooth the
+stacking velocity, thus potentially degrading its accuracy.
+
+%% 
+ % time-to-depth conversion
+ %%
+At the end of the process described in \req{INT} we obtain an interval
+velocity as a function of time. What we need is to place this velocity
+function in the Earth, i.e. to convert interval velocity from time to
+depth. The depth conversion operation is also fairly complex, because
+we are transforming to depth a function of time using a mapping that
+depends on the function itself -- a strongly non-linear process. The
+interval velocity $v\oft$ is stretched or squeezed depending on its
+own fluctuations. Therefore, if the time interval velocity $v\oft$ is
+not smooth, then the depth interval velocity $v\ofz$ can be
+unreasonably squeezed or stretched.
+
+The process leading to the velocity parameters in the Earth is known
+as \textbf{migration velocity analysis}. In this lab, we are
+discussing a simple velocity analysis process based on strong
+assumptions about the Earth, i.e. a layered model (laterally
+invariant). This process is known as ``Dix inversion'', after the
+person who invented it many decades ago. More sophisticated procedures
+exist and can construct velocity models for much more complicated
+geology. All such procedures are based on a solution to an Inverse
+Problem, one way or another.

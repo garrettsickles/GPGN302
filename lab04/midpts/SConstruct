@@ -1,0 +1,82 @@
+from rsf.proj import *
+import wplot,midpts
+
+par=midpts.param()
+wplot.param(par)
+
+# ------------------------------------------------------------
+data = 'DATA/midpts/midpts.hh'
+
+# ------------------------------------------------------------
+# get CMP gathers
+Flow('cmp',data,'dd form=native | pad beg2=2 | put o2=0')
+Flow('cmp-byte','cmp','byte gainpanel=a pclip=99')
+
+# near-offset section
+Flow(  'nof','cmp','window n2=1 f2=2')
+Result('nof','window j2=2 |'+midpts.secgrey('pclip=99',par))
+
+# mute direct arrival
+Flow('mut','cmp','mutter half=n v0=1.4')
+Flow('mut-byte','mut','byte gainpanel=a pclip=99')
+
+# ------------------------------------------------------------
+# find semblance
+Flow('smb','mut',
+     'vscan slowness=y half=n v0=0.25 nv=101 dv=0.005 semblance=y')
+Flow('smb-byte','smb','byte gainpanel=a pclip=99 allpos=y')
+
+# ------------------------------------------------------------
+# pick stacking slowness
+# change the smoothness with rect1 and rect2
+Flow('fit', 'smb','pick rect1=3 rect2=3 vel0=0.7')
+Flow('fit1','smb','pick rect1=10 rect2=10 vel0=0.7')
+Flow('fit2','smb','pick rect1=100 rect2=100 vel0=0.7')
+
+for i in (['','1','2']):
+    # stacking velocity
+    Flow(  'rms'+i,'fit'+i,'window | math output=1/input')  
+    Result('rms'+i,midpts.secgrey('mean=y color=j',par))
+
+    # compute NMO gathers     
+    Flow('nmo'+i,['mut','fit'+i],
+   'nmo velocity=${SOURCES[1]} slowness=y half=n')
+    Flow('nmo'+i+'-byte','nmo'+i,'byte gainpanel=a pclip=99')
+
+    # compute stack
+    Flow(  'stk'+i,'nmo'+i,'stack')
+    Result('stk'+i,'window j2=2 |'+midpts.secgrey('pclip=99',par))
+
+# ------------------------------------------------------------
+# make plots at various CMPs
+for im in range(0,par['nm']-1,10):
+    tag = "-%03d"%im
+
+    # plot raw CMPs
+    Result('cmp'+tag,'cmp-byte',
+           'window n3=1 f3=%d |'%im
+           + midpts.cmpgrey('',par))
+
+    # plot mutted CMPs
+    Result('mut'+tag,'mut-byte',
+           'window n3=1 f3=%d |'%im
+           + midpts.cmpgrey('',par))
+
+    # plot mutted CMPs (wiggle)
+    Result('wig'+tag,'mut',
+           'window n3=1 f3=%g |'%im
+           + midpts.cmpwigl('pclip=99',par))
+
+    # plot NMO corrected CMPs
+    Result('nmo'+tag,'nmo-byte',
+           'window n3=1 f3=%d |'%im
+           + midpts.cmpgrey('',par))
+
+    # semblance panel w/ stacking slowness overlay
+    Plot(  'smb'+tag,'smb-byte','window n3=1 f3=%g |'%im+midpts.smbgrey('',par))
+    Plot(  'fitb'+tag,'fit',    'window n2=1 f2=%g |'%im+midpts.smbplot('',par))
+    Plot(  'fitf'+tag,'fit',    'window n2=1 f2=%g |'%im+midpts.smbplot('plotcol=4 plotfat=6',par))
+    Plot(  'sfit'+tag,['fitb'+tag,'fitf'+tag],'Overlay')
+    Result( 'smb'+tag,[ 'smb'+tag,'sfit'+tag],'Overlay')
+
+End()

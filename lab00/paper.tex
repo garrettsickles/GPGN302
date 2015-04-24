@@ -1,0 +1,34 @@
+\input{../UTIL/pcsmacros}
+\def\thisdoc{lab00}
+\def\exedirs{lena}
+
+\author{Garrett Sickles}
+\title{Reproducible documents}{\thisdoc}
+
+% ------------------------------------------------------------
+%\input{../UTIL/setup}
+% ------------------------------------------------------------
+%\newpage
+
+% ------------------------------------------------------------
+%\input{../UTIL/prerequisites}
+% ------------------------------------------------------------
+
+% ------------------------------------------------------------
+%\red{ \input{intro} }
+\input{assignment}
+% ------------------------------------------------------------
+
+\inputdir{lena}
+\multiplot{2}{lcol,bpas}{width=0.45\textwidth}
+{(a) Input data, and (b) reproducible processing.}
+\newpage
+\paragraph{Discussion} The first pair of images in figure 1 were provided by the lab handout. The second pair of images in figure 2 were amended to the lab after changing the processing method. The colored image in figure 2 was created using the command \texttt{Result('lcol','lena',wplot.igrey2d('bias=30 color=j',par))} while the bandpass filtered image is the same image as in figure 1.
+% ------------------------------------------------------------
+%\input{../UTIL/wrapup}
+% ------------------------------------------------------------
+
+\tiny
+\clearpage 
+\lstinputlisting{lena/SConstruct}
+\normalsize

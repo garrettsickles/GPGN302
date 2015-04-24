@@ -1,0 +1,135 @@
+from rsf.proj import *
+import wplot,midpts,zomig,encode
+
+par=midpts.param()
+wplot.param(par)
+
+# ------------------------------------------------------------
+data = 'DATA/midpts/midpts.hh'
+
+# ------------------------------------------------------------
+# get CMP gathers
+Flow('cmp',data,'dd form=native | pad beg2=2 | put o2=0')
+Flow('cmp-byte','cmp','byte gainpanel=a pclip=99')
+
+# near-offset section
+Flow(  'nof','cmp','window n2=1 f2=2')
+Result('nof','window j2=2 |'+midpts.secgrey('pclip=99',par))
+
+# mute direct arrival
+Flow('mut','cmp','mutter half=n v0=1.4')
+Flow('mut-byte','mut','byte gainpanel=a pclip=99')
+
+# ------------------------------------------------------------
+# find semblance
+Flow('smb','mut',
+     'vscan slowness=y half=n v0=0.25 nv=101 dv=0.005 semblance=y')
+Flow('smb-byte','smb','byte gainpanel=a pclip=99 allpos=y')
+
+# ------------------------------------------------------------
+# pick stacking slowness
+# change the smoothness with rect1 and rect2
+Flow('fit','smb','pick rect1=3 rect2=3 vel0=0.7')
+
+# stacking velocity
+Flow(  'rms','fit','window | math output=1/input')
+Result('rms',midpts.secgrey('mean=y color=j',par))
+
+# compute NMO
+Flow('nmo',['mut','fit'],
+     'nmo velocity=${SOURCES[1]} slowness=y half=n')
+
+# compute stack
+Flow(  'stk','nmo','stack')
+Result('stk','window j2=2 |'+midpts.secgrey('pclip=99',par))
+
+# ------------------------------------------------------------
+# compute fit weight
+Flow(  'wgh',['smb','fit'],'slice pick=${SOURCES[1]}')
+Result('wgh',midpts.secgrey('allpos=y',par))
+
+# compute interval velocity
+Flow(['int','rmc'],['rms','wgh'],
+     '''
+     dix weight=${SOURCES[1]} vrmsout=${TARGETS[1]}
+     rect1=3 rect2=3
+     ''')
+Result('int',midpts.secgrey('mean=y color=j',par))
+
+# ------------------------------------------------------------
+# zero-offset data
+Flow(  'zof','stk','window')
+Result('zof',midpts.secgrey('pclip=99',par))
+
+# find dominant dip
+Flow  ('dip','zof','dip verb=y order=3 rect1=60 rect2=20 liter=100')
+Result('dip',midpts.secgrey('color=j',par))
+
+# diffractions
+Flow  ('dif','zof dip','pwd order=3 dip=${SOURCES[1]} verb=n')
+Result('dif',midpts.secgrey('pclip=99',par))
+
+# ------------------------------------------------------------
+# depth migration
+# ------------------------------------------------------------
+# migration velocity
+Flow('vel','int int',
+     '''
+     time2depth nz=%(nz)d oz=%(oz)g dz=%(dz)g intime=y velocity=${SOURCES[1]} |
+     put label1=%(lz)s unit1=%(uz)s label2=%(lx)s unit2=%(ux)s
+     '''%par)
+Result('vel',wplot.igrey2d('mean=y color=j screenwd=13.61',par))
+
+# migration slowness
+zomig.slowness('slo','vel',par)
+Result('slo','window | transp |'+wplot.igrey2d('mean=y color=j screenwd=13.61',par))
+
+# data in the frequency domain
+for i in ('zof','dif'):
+    encode.time2freq(i,'f'+i,par)
+
+# ------------------------------------------------------------
+# generate slowness model by scaling
+
+ns=13   # number of slownesses
+ds=0.05 # fractional change of the slowness
+for js in range(ns):
+    s=1+(js-(ns-1)/2)*ds # slowness scaling factor
+    tag = "-%03d"%(100*s)
+    Flow('slo'+tag,'slo','scale rscale=%g'%s)
+
+# ------------------------------------------------------------
+# migration with different slownesses
+for i in ('zof','dif'):
+    for js in range(ns):
+        s=1+(js-(ns-1)/2)*ds # slowness scaling factor
+        tag = "-%03d"%(100*s)
+        zomig.image('i'+i+tag,'slo'+tag,'f'+i,par)
+
+    # gain images together
+    Flow('i'+i+'byte',
+         ['i'+i+'-%03d'%(100*(1+(js-(ns-1)/2)*ds)) for js in range(ns)],
+         '''
+         cat axis=2 space=n ${SOURCES[1:%d]} |
+         transp plane=23 | transp plane=12 |
+         byte gainpanel=a pclip=99.
+         '''%ns)
+
+    # plot images
+    for js in range(ns):
+        s=1+(js-(ns-1)/2)*ds
+        tag = "-%03d"%(100*s)
+
+        # full image
+        Result('i'+i+tag,'i'+i+'byte',
+               'window n3=1 f3=%d |'%js
+            + wplot.igrey2d('screenwd=13.61',par))
+
+        # zoom image
+        Result('z'+i+tag,'i'+i+'byte',
+               'window n3=1 f3=%d min2=10 max2=13.5 |'%js
+            + wplot.igrey2d('min2=10 max2=13.5 screenratio=1 screenht=10',par))
+        
+# ------------------------------------------------------------
+End()
+

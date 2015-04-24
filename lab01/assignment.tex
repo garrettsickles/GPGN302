@@ -1,0 +1,106 @@
+\section{Assignment}
+
+In this lab, you will experiment with a seismic antenna over a model
+of the Earth, \rfg{velo0}. Assume that there are sources of energy in
+the subsurface and that you observe the waves arriving at the surface
+with an array of receivers, i.e. the seismic antenna. You also observe
+the seismic wavefield as it evolves over time,
+\rfgs{wfld0-01}-\rfn{wfld0-13}, and the data recorded on the surface,
+\rfgs{data0}-\rfn{wigl0}. You can also locate your sources, i.e. the
+image, by moving all data backward in time from your observation
+antenna, \rfg{imag0}. You will notice that some sources are imaged
+better than others.
+
+Your task is to experiment with different configurations of source and
+receivers and discuss your observations.
+
+\begin{enumerate}
+\item Is it preferable to monitor the Earth using a wide or narrow
+  seismic antenna? Explain why. What are the pros and cons of your
+  choice? 
+\item Is it preferable to monitor the Earth using a dense or sparse
+  seismic antenna? Explain why. What are the pros and cons of your
+  choice? 
+\item Does it matter how long you record data? What parameters
+  influence your choice of observation time? 
+  (Look inside the \texttt{sigsbee.py} module for hints.)
+\item Do you prefer to display data using the variable density plot or
+  with the wiggle plots? Motivate your answer.
+\item What factors control the quality of the image? What would you do
+  to improve the image? Why are some sources imaged better than
+  others?
+\end{enumerate}
+Illustrate your answers by modifying the parameters in the demo
+\texttt{SConstruct}. Include new reproducible figures supporting your
+answers. 
+
+% ------------------------------------------------------------
+\subsection{Hints}
+The file \texttt{SConstruct} in the \texttt{sigsbee} directory
+contains the rules needed to simulate seismic wavefields and to
+customize the seismic antenna. Look for the like containing
+\texttt{import} at the top of the \texttt{SConstruct}.
+
+The function \texttt{geom.boxarray2d} generates the coordinates of the
+seismic sources. Modify the \texttt{n} (number), \texttt{o} (origin),
+\texttt{d} (delta) to change the number and distribution of sources in
+the subsurface. You can visualize this by running \texttt{scons
+  velo0.view}.
+
+The function \texttt{geom.horizontal2d} generates the coordinates of
+the receivers, i.e. the seismic antenna. The file \texttt{tt.rsf} is a
+horizontal line of receivers at a specified depth, of which we window
+\texttt{rr.rsf} to make the real antenna we will use in the exercise.
+
+The files \texttt{velo.rsf} and \texttt{dens.rsf} contain the velocity
+and density models, respectively. The velocity we use in this exercise
+is a smooth version of the Sigsbee model. Experiment with the
+smoothing window size \texttt{rect1=} and \texttt{rect2=}.
+
+The file \texttt{wav.rsf} contains the seismic source. In this case,
+we use a short pulse, a ``Ricker'' wavelet with a peak frequency of
+$10$~MHz. Experiment with the peak frequency to see how it impacts the
+data and the observations. 
+
+The \texttt{SConstruct} is designed to work for many experiments,
+according to the parameter \texttt{ne}. As you generate more seismic
+antennas, i.e. \texttt{rr*.rsf}, change \texttt{ne} to include your
+new experiment in the simulation.
+
+The files \texttt{wfld}, \texttt{data} and \texttt{imag} contain the
+wavefield, data and image, respectively. Each have rules to make
+(either \texttt{Flow()} or functions like \texttt{awe.awefd2d} or
+\texttt{awe.awertm2d}) and rules to plot (\texttt{Result()}. You
+should not have to modify these rules in this exercise, but simply add
+new antennas to the rules preceding the modeling/imaging section.
+
+% ------------------------------------------------------------
+\inputdir{sigsbee}
+\multiplot{2}{wfld0-01,wfld0-04,wfld0-09,wfld0-13,data0,wigl0,velo0,imag0}
+{width=0.45\textwidth}{(a)-(d) Wavefield snapshots at different (increasing)
+times; data displayed using (e) variable density and (f) wiggles; (g)
+velocity model and (h) image obtained by time-reverse imaging.}
+
+\inputdir{alter}
+\multiplot{2}{default,dense,sparse,wide,narrow,delayed}
+{width=0.45\textwidth}{Images obtained by time-reverse imaging for different seismic antenna configurations: (a) Default, as in figure 1-h; (b) More dense (x2) and (c) less dense (x $\frac{1}{2}$) arrays over same space as the default configuration; (d) Wider (+5) and (e) narrower (-1.5) arrays with the same density as the default configuration; (f) Default time-reverse image taken at .}
+
+\pagebreak
+\subsection{Discussion}
+\begin{enumerate}
+
+%Is it preferable to monitor the Earth using a wide or narrow seismic antenna? Explain why. What are the pros and cons of your choice?
+\item It is preferable to use a wide seismic antenna because it can image more of the subsurface simultaneously. This is not always possible because a wider array requires more equipment which may not be economically feasible. This means that a wider seismic antenna would not have as many recievers as a smaller antenna of comprable cost. Although a less dense seismic antenna may not be preferable, it can still capture valuable seismic information. In \rfn{wide} the seismic antenna is 233\% wider than the antenna in \rfn{dense} yet it only uses 33\% more recievers. The detail gained from the dense antenna is not worth the 5 additional kilometers it does not observe. The wider seismic antenna gives a better description of the subsurface because it images the top of the salt from 11 to 14 km where as the narrower seismic antenna only images an edge of the salt around 10.5 km.
+
+%Is it preferable to monitor the Earth using a dense or sparse seismic antenna? Explain why. What are the pros and cons of your choice?
+\item It is preferable to use a dense seismic antenna because it provides more observational data of the subsurface in question. As seen in \rfn{dense} the dense sesmic antenna gives a much cleaner, less noisy time-reversal image than that of the sparse seismic antenna seen in \rfn{sparse}. A dense seismic antenna is not always possible because they require more economic and physical resources so there must be a compromise between sparse and dense seismic antennas. The default seismic antenna's time-reversal image in \rfn{default} shows a compromise between the two extremes. This seismic antenna captures an effective image of the subsurface and is an intermediary of the sparse and dense images. Although it is not as detailed or smoothed as \rfn{dense} it captures the same pattern without the confusion of waves produced by the the sparse seismic array as seen in figure \rfn{sparse}.
+
+%Does it matter how long you record data? What parameters influence your choice of observation time? (Look inside the sigsbee.py module for hints.)
+\item It is important to observe data for a significant length of time. The observation time of the default survey which produced the time-reversal image in \rfn{default} was 4 seconds whereas the observation time for the time-reversal image in \rfn{delayed} was 2 seconds. There are significant differences between the two images, in particular the size of the area of investigation. In \rfn{default} the time-reversal image begins to identify the bottom and top of the salt intrusion. On the other hand the time-reversal image for \rfn{delayed} which only observed half the time as the default image does not identify either of these features. Increasing the observation time by two seconds significantly improves the time-reversal image of the subsurface and is does not require significant resources for such a small improvement.
+
+%Do you prefer to display data using the variable density plot or with the wiggle plots? Motivate your answer.
+\item I prefer the density plots because the anomalous shapes are easier to identify and have more continuity. The wiggle plots and the density plots seem to show the same idea but the density plot is easier to interpret for me at this point in the seismic class. On the other hand the wiggle plot makes identifying the exact depth of each anomaly significantly easier because each peak is easily identifiable and unique. A wiggle plot might be preferable to a density plot for a given reciever configuration because the density plot becomes pixelated when the number of recievers is relatively small for the size of the survey.
+
+%What factors control the quality of the image? What would you do to improve the image? Why are some sources imaged better than others?
+\item There are a multitude of factors that affect the quality of a seismic imaging of the subsurface. Some of the factors we directly observed in this lab were the number of geophones, the space between each geophone, the total coverage area of the geophone array, and the duration of observation at each of the geophones. Changing each of these factors altered the resulting time-reversal images in different ways. A larger seismic antenna meant more coverage of the subsurface while a more dense seismic antenna improved the resolution of each of the images. Both of these previously mentioned alterations improved the quality of the time-reversal image. Some sources are imaged better than others because the seismic antenna used in they suvey does not record the signal from each source the same way. The location of each seismic source affects its contribution to the data collected by the seismic antenna on the surface. For instance the wide time-reversal image \rfn{wide} does not indicate the existence of seismic sources in the dike on the right side of the image even though seismic sources do exist within the dike, as seen in figure \rfn{velo0}.These sources do not occur in the time-reversal image because the seismic waves attenuate within this body. This means the seismic antenna does not observe the waves created by these sources. Additionally, the seismic sources below the dike are not imaged well because the majority of the energy they create is lost in the dike. This also means the seismic antenna will not image these sources well even though they are not directly in the dike. 
+\end{enumerate}

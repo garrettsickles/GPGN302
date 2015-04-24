@@ -1,0 +1,3 @@
+uses=['sfsegyread', 'sfput', 'sfwindow', 'sfmath', 'sfcat', 'sfreverse', 'sftransp', 'sfdd', 'sfintbin', 'sfgrey', 'sfspike', 'sfspray', 'sfadd', 'sfscale', 'sfmask', 'sfstack', 'sfgraph', 'sftpow', 'sfbyte']
+data=[]
+size= 8798149440

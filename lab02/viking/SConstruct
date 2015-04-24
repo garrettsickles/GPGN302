@@ -1,0 +1,48 @@
+## 
+# Viking Graben example
+##
+
+from rsf.proj import *
+import viking,wplot
+par=viking.param()
+wplot.param(par)
+
+# ------------------------------------------------------------
+# get raw traces
+viking.gettraces('traces',par)
+
+# make shots
+viking.makes('shot','traces',par)
+Flow('shot-byte','shot',
+     '''
+     tpow tpow=2 |
+     byte gainpanel=a pclip=99
+     ''')
+
+# ------------------------------------------------------------
+for i in range(14):
+    tag = "-%02d"%i  
+    off = 0.1+0.2*(i+1)
+   
+    Result('offs'+tag,'shot-byte',
+           'window n2=1 min2=%g max1=3 |'%off +
+           viking.secgrey('',par))
+    Result('offw'+tag,'shot',
+           'window n2=1 min2=%g j3=15 max1=3 | tpow tpow=2 |'%off +
+           viking.secwigl('pclip=99',par))
+
+# ------------------------------------------------------------
+for i in range(25):
+    tag = "-%02d"%i
+
+    Result('shot'+tag,'shot-byte',
+           'window n3=1 min3=%g max1=3 |'%i
+         +viking.cmpgrey('',par))
+    
+    Result('wigl'+tag,'shot',
+           'window n3=1 min3=%g max1=3 j2=3 | tpow tpow=2|'%i
+         +viking.cmpwigl('pclip=99',par))
+
+# ------------------------------------------------------------
+End()
+

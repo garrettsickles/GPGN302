@@ -1,0 +1,122 @@
+\section{Assignment}
+
+In this lab, you will experiment with wave modeling and observe
+seismic wavefields and seismic data. The modeling example is in the
+directory \texttt{sigsbee}. You will also look at field data using the
+example in the directory \texttt{viking}.
+
+\subsection{\texttt{sigsbee} example}
+\begin{enumerate}
+\item Modify the acquisition geometry for the experiment shown in
+  \rfgs{velo0} and \rfn{dens0} to get a better representation of the
+  seismic wavefield. You can expand the array or increase the density
+  of receivers. You can also move your array sideways or change its
+  depth. Use common (economic) sense when redefining the acquisition.
+\item On \rfgs{wfld0-04}-\rfn{wfld0-16} identify the following types of
+  events: 
+  \begin{itemize}
+  \item direct waves;
+  \item reflections;
+  \item diffractions;
+  \item multiples.
+  \end{itemize}
+  Describe some of the main characteristics of each type of wave. The
+  wavefield movie is a helpful tool.
+\item Identify the corresponding events on \rfg{data0}. Use
+  coordinates to specify what events you are describing.
+\item Compare the data shown in \rfg{data0} with the shot record image
+  shown in \rfg{imag0}. Discuss qualitatively the relationship between
+  the acquisition aperture and the image spatial extent. What factors
+  control the extent of the image? How could you extend the image to a
+  larger portion of the subsurface? 
+\end{enumerate}
+
+% ------------------------------------------------------------
+\subsection{\texttt{viking} example}
+
+\begin{enumerate}
+\item If possible, identify on \rfg{shot-12} the same type of events
+  you have seen in the Sigsbee example. You are looking at common-shot
+  gathers for field data, i.e. collection of seismic traces
+  corresponding to a given shot. Some events may not be visible on
+  these plots. Justify your selection using the observations made in
+  the \texttt{sigsbee} example.
+\item Repeat this exercise on \rfg{offs-00}. You are looking at a
+  near-offset section of the same data displayed in \rfg{shot-12}. A
+  near offset section displays at every position in space data
+  corresponding to a source at that position and a receiver located at
+  a fixed distance away. Justify your selection using the observations
+  made in the \texttt{sigsbee} example.
+\end{enumerate}
+
+% ------------------------------------------------------------
+\inputdir{sigsbee}
+
+\multiplot{2}{velo0,dens0,wfld0-04,wfld0-08,wfld0-12,wfld0-16,data0,imag0}
+{width=0.45\textwidth} {Synthetic model: (a) velocity, (b) density,
+  (c)-(f) wavefield snapshots, (g) data, and (h) image.}
+
+\multiplot{2}{velo1,dens1,wfld1-04,wfld1-08,wfld1-12,wfld1-16,data1,imag1}
+{width=0.45\textwidth} {Synthetic model: (a) velocity, (b) density,
+  (c)-(f) wavefield snapshots, (g) data, and (h) image.}
+
+\multiplot{2}{velo2,dens2,wfld2-04,wfld2-08,wfld2-12,wfld2-16,data2,imag2}
+{width=0.45\textwidth} {Synthetic model: (a) velocity, (b) density,
+  (c)-(f) wavefield snapshots, (g) data, and (h) image.}
+
+\sideplot{imag}{width=\textwidth}{Stack image for all shots used for
+  imaging.}
+
+% ------------------------------------------------------------
+\newpage
+\subsection{\texttt{sigsbee} discussion}
+
+\begin{enumerate}
+  \item The geometry of the sigsbee seismic survey is a common-shot gather with source coordinates of (10.0, 0.0) km, (8.0, 0.0) km, and (6.0, 0.0) km and recveiver coordinates ranging from 10.1 to 14.0 km, 8.1 to 12.0 km, and 6.1 to 10.0 km respectively. The receiver separation for each of these surveys is specified by the parameter \texttt{j2 = 4} in the \texttt{SConstruct} file. A value of 4 for \texttt{j2} means that the receiver separation is 100 ft. The receivers remain on the surface because it is not economical to place this many recievers below the surface for 3 different shot gathers. The overlap of each of these 3 common-shot gathers is 2 km or approximately 50\% on the right hand side of the survey. This means the survey from  10.1 to 14.0 km and the survey from 8.1 to 12.0 km overlap in the region from 10.1 to 12.0 km. This amount of overlap is enough to create an valuable and accurate stack image summarizing the entirity of the three different common-shot gathers in the survey.
+
+  \item Identify the following types of events on figures \rfn{wfld0-04}-\rfn{wfld0-16}:
+  \begin{enumerate}
+    \item[\rfn{wfld0-04}]
+    \begin{itemize}
+      \item \textbf{direct waves:} The direct waves in figure \rfn{wfld0-04} are the semicircle centered at 10 km intersecting the surface at approximately 9.25 km and 10.75 km. This direct wave is approximately at a maximum depth of 2.25 km directly below the source at 10 km. 
+      \item \textbf{reflections:} There are no reflected waves in figure \rfn{wfld0-04} because the direct wave has not encountered an interface yet.
+      \item \textbf{diffractions:} There are no diffracted waves in figure \rfn{wfld0-04} because the direct wave has not encountered any geometry favorable to diffraction.
+      \item \textbf{multiples:} There are no multiples because the software did account for them in these seismic images.
+    \end{itemize}
+    \item[\rfn{wfld0-08}]
+    \begin{itemize}
+      \item \textbf{direct waves:} The direct waves in figure \rfn{wfld0-08} are represented by the two arcs intersecting the surface at 8.3 km and 11.7 km continuing down to depths of 3 km and 2.5 km, respectively. The direct wave is also present as a refracted arc beginning at the coordinate (9.2, 3.0) km and ending near (10.8, 3.4) km below the salt body. Within the salt body the direct wave speeds up because the salt has a relatively higher seismic velocity. This energy is represented by the thicker arc within the salt body beginning at the location (11.8, 2.6) km and ending at the location (11.0, 3.4) km. This diving wave will speed up within the salt body and reach some of the seismic receivers before the direct wave which is traveling along the surface interface. At this snapshot in time the direct wave is still a collection of semi continous arcs connected by cusps and it has not been interrupted by other reflected or refracted waves.
+      \item \textbf{reflections:} There are two distinct reflections in \rfn{wfld0-08}. These two reflections begin where the two fronts of the direct wave encounter the first contact. These two reflections are not one continuous reflection because the direct wave is reflected and diffracted off the tip of the salt body in the vicinity of the location (10.0, 2.6) km.
+      \item \textbf{diffractions:} There is one significant point of diffraction in figure \rfn{wfld0-08}. This point is at the tip of the salt contact with the overlying layer approximately at the location (10.1, 2.5) km. This point diffracts the direct wave because the layer overlying the salt body comes to a cusp at this location thus diffracting the wave energy in all directions. This diffraction is causes disorganization if the reflected wavefront which is apparent in figure \rfn{wfld0-08}.
+      \item \textbf{multiples:} There are no multiples because the software did not account for them in the seismic images.
+    \end{itemize}
+    \item[\rfn{wfld0-12}]
+    \begin{itemize}
+      \item \textbf{direct waves:} The direct waves figure \rfn{wfld0-12} are represented by the arcs from (7.5, 1.4) km to (8.5, 3.7) km, from (8.5, 3.7) km to (10.4, 4.5) km, from (10.4, 4.5) km to (12.2, 4.7) km, and the diving wave beginning at (12.0, 1.6) km going into the salt body at (14.4, 3.5) km and then remerging below the salt body into the horizontal layers at (14.0, 4.5) km. The most interesting feature of the direct waves in figure \rfn{wfld0-12} is the diving wave which is about to pass the direct wave at the location (12.5, 1.75) km. The diving wave sped up inside the salt body and will reach the surface before the source wave at the receiver array at the point (13.1, 1.4) km in snapshot \texttt{wfld0-08} (not shown).
+      \item \textbf{reflections:} The reflections in figure \rfn{wfld0-12} are represented by the arcs from (9.0, 1.4) km to (8.4, 3.4) km and from (11.3, 1.4) km to (12.2, 2.5) km.Both of these reflections are caused first by interface in the subsurface, not by the salt body or other layers below the interface.
+      \item \textbf{diffractions:} Although it is unlikely no diffractions occurred, there are no difraction patterns significant enough to be observed in figure \rfn{wfld0-12}.
+      \item \textbf{multiples:} There are no multiples because the software did not account for them in the seismic image.
+    \end{itemize}
+    \item[\rfn{wfld0-16}]
+    \begin{itemize}
+      \item \textbf{direct waves:} The direct waves in figure \rfn{wfld0-16} are represented by the almost continuous wavefront beginning at (6.5, 1.4) km and going down into the subsurface to the point (7.7, 4.3) km, the arc beginning at (13.3, 1.4) km and ending at (13.2, 2.5) km, the arc beginning at (9.0, 4.7) km and ending at (12.0, 5.0) km, and the arc beginning at (7.5, 4.0) km and ending at (10.0, 6.0) km. Since the sanpshot in figure \rfn{wfld0-12}, the diving wave has either intersected the surface or traveled to far in the positive x-direction to be seen in figure \rfn{wfld0-16}.
+      \item \textbf{reflections:} There are two distinct reflection wavefronts in figure \rfn{wfld0-16}. The first beginning at (7.8, 1.4) km going to (7.4, 3.0) km and the second beginning at (12.8, 1.4) km and going to (13.2, 2.3) km. These two wavefronts are the same reflections present in the earlier snapshot in figure \rfn{wfld0-12} but they have propogated further in the negative and positive x-directions, respectively.
+      \item \textbf{diffractions:} There are no identifiable diffractions because there is no geometry conductive to diffraction away from the intrusive salt body's contacts with the surrounding layers.
+      \item \textbf{multiples:} There are no multiples because the software did not account for them in the sesmic image.
+    \end{itemize}
+  \end{enumerate}
+\item There are three distinct events present in figure \rfn{data0}, a reflection, a diffraction, and a diving wave. The reflected wave is the first event seen at beginning at the location (10.05 km, 1.5 sec). This wave not continuous because it reflects differently off the salt body than it does off of the horizontal layers surrounding the majority of the salt body. This change is illustrated by the divergence of the primary reflection into two distinct wavefronts, the first significantly weaker than the second. This is illustrated in \rfn{data0} by the divergence of the two wavefronts at the location (11.5 km, 1.6 sec). This divergence is caused by the diffraction of the direct wave off the truncation of the horizontal layer ontop of the salt body. The next visible distinct event is the diving wave caused by the direct wave propogating through the salt body at a higher velocity than in the surrounding rock. This wave can first be seen at the location (10.5 km, 1.7 sec) at the bottom of the grouping of the significant amplitude waves. The diving wave follows its shallower angle until it intersects and passes the reflected at the location (11.7 km, 1.85 sec). The diving wave continues along its path until it intersects and passes the diffracted wave at (12.3 km, 2.0 sec). Past this point the diving wave arrives at the seismic recievers to the positvie x-direction before the reflected or diffracted waves. The direct wave is not present in figure \rfn{data0} because it has been removed from the data.
+\item The data show in figure \rfn{data0} and the seismic image shown in \rfn{imag0} display different information about the subsurface. Figure \rfn{data0} shows the arrival of different waves at the seismic receivers as a function of time in the down direction where as figure \rfn{imag0} displays a time reversed image of what a possible configuration of the subsurface is given the raw data displayed in \rfn{data0}. The seismic image in figure \rfn{imag0} however is not a complete or correct image of the suburface. The sesmic image instead indicates the survey was taken to the right of the 10 km mark in \rfn{imag0}. This is indicated by the abundance of interpretted structure in between 10 and 14 km and the lack of structure to the left of the 10 km mark. The seismic survey shown in figure \rfn{data0} does not have a sufficient aperture to accurately model the subsurface outside the extent of the seismic receivers. In order to better model the subsurface the seismic survey must have a more spatial data with significantly greater spatial extent. By combining different overlapping surveys to cumulatively increase the extent of the survey's data or by using more seismic receivers we can increase the aperture of the survey. This would better model the subsurface because there is now redundancy in the data and more data points to model the same features, all coming from unique locations.  
+\end{enumerate}
+\subsection{\texttt{viking} example}
+\begin{enumerate}
+\item The common shot gather data in figure \rfn{shot-12} has similar properties to the data from figure \rfn{data0} discussed in the \texttt{sigsbee} analysis. Both of these figures display a primary reflection which arrives at the recievers as time increases to the positive x-direction, diffraction after the arrival of the primary reflection, and then a diving wave which eventually passes the reflection, arriving at the recievers before the reflection. The primary reflection in figure \rfn{shot-12} begins at the point (0.25 km, 0.5 sec) and arcs in the positive x-direction until it intersects with the diving wave. In figure \rfn{shot-12} this event occurs at the point (1.75 km, 1.2 sec). The specific diving wave which passes the reflection at this point begins on the left side of figure \rfn{shot-12} at the point (0.25 km, 0.75 sec). This means past this point in the positive x-direction the diving wave arrives at the recievers before the reflected wave. The final similarity in the two figures is the diffraction pattern in the data.The diffraction in figure \rfn{shot-12} can be identified as the v shape reaching its cusp at the point (0.6 km, 0.75 sec).
+\item The near-offset section in figure \rfn{offs-00} and the figure previously discussed, figure \rfn{shot-12} share some of the same information. This makes sense because the two images overlap. The events in figure \rfn{shot-12} should correspond to the same events in figure \rfn{offs-00} even though the two sets of data were collcted using different types of seismic surveys. The first easily identifiable shared event is the arrival of the first reflected wave. In figure \rfn{shot-12} this event begins on the left side of the figure at the point (0.25 km, 0.5 sec). This event corresponds to the continuous horizontal reflection beginning at the point (0.0 km, 0.5 sec) in figure \rfn{offs-00}. The more difficult events to identify are the diving waves and the diffractions in figure \rfn{offs-00}. These events maybe indicated by the large v-shapes in figure \rfn{offs-00} which come to cusps at the points (14 km, 0.95 sec) and at (0.0 km, 0.75 km). Both of these intersections indicate there is not simple horizontal layering in the subsurface and the structure of the ground in question for this seismic survey has produced types of waves that are indicative of a more complex geometry.
+\end{enumerate}
+% ------------------------------------------------------------
+
+\inputdir{viking}
+
+\multiplot{2}{shot-12,offs-00}{width=0.8\textwidth}{Viking Graben data:
+  (a) common-shot gather and (b) near-offset section.}
+% ------------------------------------------------------------

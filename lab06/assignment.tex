@@ -1,0 +1,102 @@
+\section{Assignment}
+
+You have two datasets at your disposal:
+\begin{itemize}
+
+  \item The data in the directory \texttt{midpts} is the same Gulf of Mexico dataset used in previous labs. This region of the Earth is described by a fairly simple velocity. The objective is to image the faults as clearly as possible.
+
+  \item The data in the directory \texttt{gom} are also from the Gulf of Mexico, but they correspond to a more complicated Earth with salt close to the surface. The objective is to map the top of the salt body as accurately as possible.
+
+\end{itemize}
+
+Choose one dataset for the lab and comment-out all figures
+corresponding to the other example.
+
+\subsection{\texttt{midpts} questions}
+\begin{enumerate}
+
+  \item Use the figures generated with different velocities to discuss how the depth image changes as a function of velocity. Explain the movement observed in the various images.
+
+  \item What is the main difference between reflections and diffractions in a zero-offset section? Why are diffractions useful for imaging?
+
+  \item Run migrations for multiple velocities (or slownesses) and explain which one gives you the best image? Specify the slowness scaling factor and justify your answer. Does your analysis indicate that you need to increase or decrease the velocity overall?  If necessary, include additional images to support your answer.
+
+  \item Is velocity analysis based on diffractions superior to the one based on moveout analysis? Motivate your answer. Discuss the pros and cons of each method. 
+
+\end{enumerate}
+
+
+\subsection{\texttt{midpts} discussion}
+\begin{enumerate}
+  
+  % izof-070 means the slownes is 70% of the original slowness
+  \item The depth images significantly change as a function of velocity. In figure \rfn{izof-070} we see the image at $70\%$ slowness. This image is significantly more spread out between reflectors than the $100\%$ slowness image in figure \rfn{izof-100}. Additionally, in between these images the right dipping faults' dip angles appear to decrease and the faults begin to rotate counterclockwise. This effect is due to the increase in slowness. These effects become even more exaggerated in the $130\%$ slowness image in figure \rfn{izof-130}. In the images produced with slownesses greater than $110\%$ the reflectors come so close that the faults begin to become indistinguishable.  
+
+  % If the diffractions are hyperbolic down, the velocity is too low. 
+  % If the diffractions are hyperbolic up, the velocity is too high.
+  % If the diffraction are tightly organized, the velocity is right.
+  \item The main differences between reflections and diffractions in a zero offset image are that reflectors move up and down as slowness is changed whereas diffractions change their hyperbolic curvature as a function of the slowness. If diffractions create downwards hyperbolas the velocity model is too low and if they create upwards hyperbolas the velocity model is too high. When the diffractions are tightly organized and collapse into the same anomaly we know the velocity is just right. Different diffraction hyperbolas at different locations in the same image may have different curvatures. This means that the traces which significantly shaped that diffraction's hyperbola were modeled at an incorrect velocity while other parts of the image may have been modeled at their correct velocity. Another significant difference between reflections and diffractions in a zero offset image is that diffractions highlight discontinuities between layers whereas reflections highlight different continuous layers. This is an important distinction because both these sets of information are complementary to one another and may not be apparent when only viewing one of the types of information, reflection or diffraction, by itself.
+
+  % Which slowness gives the tightest diffraction image?
+  % The slowness may need to be increased on the right side of the figure. The velocity needs to be decreased.
+  % Develop a new slowness model to do your post stack migration.
+  % In between 90%, 95%, and 100% slowness gives the best collapse of the diffractions.
+  \item I believe that the $90\%$ and the $95\%$ slowness images or some combination of the two seen in figures \rfn{idif-090} and \rfn{idif-095} provide the most accurate image and best collapse the diffraction curves. In both of these images the diffraction hyperbolas seem to be very close horizontal indicating each velocity models' accuracy. The slowness may need to be increased on the right hand side of figure \rfn{idif-095} because the diffraction hyperbolas in this area of the image appear to curve upwards. Since the majority of the diffraction hyperbolas collapse well we know these images closest to an accurate velocity model out of all of the images produced. This means my analysis indicates that the slowness needs to be decreased by $5-10\%$ to achieve the most accurate image.
+
+  % Flattening out the moveout hyperbolas and finding a slowness vs. finding the slowness which best focuses the diffraction curves.
+  \item Velocity analysis based on diffractions is superior to analysis based on moveout because the diffraction based analysis not only provides a more accurate method to gauge the corectness of your velocity model but it also highlights and contains valuable information about important features in the subsurface. Moveout analysis is not as comprehensive as diffraction analysis because it focuses on analyzing hyperbolas created by reflectors. Choosing the correct reflector to flatten is not always easy and migrating the data is a tedious practice in trial and error. Diffraction based analysis is also a task of trial and error but diffractions are so well localized that when they do occur it is easy to identify what a correct velocity model is due to the indicative shapeof the diffraction hyperbolas. Finding a velocity model which best focused the diffraction curves as done in this lab was much more effective than flattening the moveout hyperbolas to find a slowness. When there are strong diffractions in the subsurface, diffraction analysis is a much more effective and efficient way of finding an accurate velocity model.  
+
+\end{enumerate}
+
+
+% ------------------------------------------------------------
+\inputdir{midpts}
+% ------------------------------------------------------------
+\multiplot{1}{vel}{width=\textwidth}{Model 1: interval velocity in
+  depth.}
+
+\multiplot{2}{zof,dif}{width=\textwidth}{Model 1: (a) zero-offset
+  data and (b) zero-offset diffractions.}
+
+\multiplot{3}{izof-070,izof-100,izof-130}{width=0.7\textwidth}{Reflection Images: (a) $70\%$ Slowness, (b) Original Slowness, (c) $130\%$ Slowness.}
+\multiplot{3}{idif-070,idif-100,idif-130}{width=0.7\textwidth}{Diffraction Images: (a) $70\%$ Slowness, (b) Original Slowness, (c) $130\%$ Slowness.}
+
+% In between idif-090 and idif-095 looks approximately correct. The right side of the figure looks like the slowness need to be greater though.
+%\multiplot{2}{}
+
+
+%\multiplot{2}{izof-070,idif-070}{width=0.5\textwidth}{Model 1: $70\%$}
+%\multiplot{1}{izof-075,idif-075}{width=\textwidth}{Model 1: $75\%$}
+%\multiplot{1}{izof-080,idif-080}{width=\textwidth}{Model 1: $80\%$}
+%\multiplot{1}{izof-085,idif-085}{width=\textwidth}{Model 1: $85\%$}
+\multiplot{1}{izof-090,idif-090}{width=\textwidth}{Model 1: $90\%$}
+\multiplot{1}{izof-095,idif-095}{width=\textwidth}{Model 1: $95\%$}
+%\multiplot{2}{izof-100,idif-100}{width=0.5\textwidth}{Model 2: image obtained with the original velocity.}
+%\multiplot{1}{izof-105,idif-105}{width=\textwidth}{Model 1: $105\%$}
+%\multiplot{1}{izof-110,idif-110}{width=\textwidth}{Model 1: $110\%$}
+%\multiplot{1}{izof-115,idif-115}{width=\cd textwidth}{Model 1: $115\%$}
+%\multiplot{1}{izof-120,idif-120}{width=\textwidth}{Model 1: $120\%$}
+%\multiplot{1}{izof-125,idif-125}{width=\textwidth}{Model 1: $125\%$}
+%\multiplot{2}{izof-130,idif-130}{width=0.5\textwidth}{Model 3: $130\%$}
+
+
+% ------------------------------------------------------------
+%\inputdir{gom}
+% ------------------------------------------------------------
+%\multiplot{1}{vel}{width=\textwidth}{Model 2: interval velocity in depth.}
+
+%\multiplot{2}{zof,dif}{width=\textwidth}{Model 2: (a) zero-offset data and (b) zero-offset diffractions.}
+
+%\multiplot{1}{izof-070,idif-070}{width=\textwidth}{Model 1: $70\%$}
+%\multiplot{1}{izof-075,idif-075}{width=\textwidth}{Model 1: $75\%$}
+%\multiplot{1}{izof-080,idif-080}{width=\textwidth}{Model 2: $80\%$}
+%\multiplot{1}{izof-085,idif-085}{width=\textwidth}{Model 2: $85\%$}
+%\multiplot{1}{izof-090,idif-090}{width=\textwidth}{Model 2: $90\%$}
+%\multiplot{1}{izof-095,idif-095}{width=\textwidth}{Model 2: $95\%$}
+%\multiplot{1}{izof-100,idif-100}{width=\textwidth}{Model 2: image obtained with the original velocity.}
+%\multiplot{1}{izof-105,idif-105}{width=\textwidth}{Model 2: $105\%$}
+%\multiplot{1}{izof-110,idif-110}{width=\textwidth}{Model 2: $110\%$}
+%\multiplot{1}{izof-115,idif-115}{width=\textwidth}{Model 2: $115\%$}
+%\multiplot{1}{izof-120,idif-120}{width=\textwidth}{Model 2: $120\%$}
+%\multiplot{1}{izof-125,idif-125}{width=\textwidth}{Model 1: $125\%$}
+%\multiplot{1}{izof-130,idif-130}{width=\textwidth}{Model 1: $130\%$}

@@ -1,0 +1,66 @@
+\section{Assignment}
+
+\begin{enumerate}
+\item Change to the example directory \texttt{lena} and build a few
+  preset figures. Use the command \\
+  \texttt{scons view} \\
+  to look at the pictures on screen. Press \texttt{Q} to close a
+  figure on screen. The program \texttt{scons} will continue to build
+  figures in the order outlined in the \texttt{SConstruct}. When you
+  are ok with your figures, use the command \\
+  \texttt{scons lock} \\
+  to move your figures to the archive -- this is necessary for
+  reproducibility.
+\item Return to the directory containing the file \texttt{assignment.tex}
+  and edit this file. If necessary, remove the comment sign (\%) from
+  the lines indicating the figure directory and the two figures to be
+  included in the document:
+  \begin{verbatim}
+  \inputdir{lena}
+  \multiplot{2}{lena,bpas}{width=0.45\textwidth}
+  {(a) Input data, and (b) reproducible processing.}
+  \end{verbatim}
+  Your document now contains reproducible figures.
+\item Rebuild the document using the command \\
+  \texttt{scons read}.
+\item Return to the \texttt{lena} directory and open the file called
+  \texttt{SConstruct}. This file contains the rules for making the two
+  figures. Lena's image is a standard benchmark for digital signal
+  processing -- we will use it just as an image to play with
+  processing rules. Processing is done using the function
+  \texttt{Flow()} and results are created using the function
+  \texttt{Result()}. Modify something in this \texttt{SConstruct}, for
+  example the low pass filter applied to the image or the color scheme
+  used for the plots, or the smoothness of the plots, etc.
+  % 
+  You could, for example, smooth the figure using a rule like
+  \begin{center}
+    \texttt{Flow('lsmo','lena','smooth rect1=10 rect2=10')}
+  \end{center}
+  This command will produce a new data file. You can clone the result
+  rule used for the figure called \texttt{lena} to add a new result.
+  % 
+  You could also add color to the figure using a rule like
+  \begin{center}
+    \texttt{Result('lcol','lena',wplot.igrey2d('bias=128 color=j',par))}
+  \end{center}
+  
+\item Rebuild the figures using the command \\
+  \texttt{scons view}, \\
+  then run \\
+  \texttt{scons lock} \\
+  when you are happy with your figures. Then, return to the lab
+  directory and rebuild your document using the command \\
+  \texttt{scons read}. \\
+  Your new figures should be included in the document. You have just
+  reproduced and modified a simple document. We will repeat this
+  process in all following labs.
+\end{enumerate}
+
+% ------------------------------------------------------------
+\inputdir{lena}
+\multiplot{2}{lena,bpas}{width=0.45\textwidth}
+{(a) Input data, and (b) reproducible processing.}
+
+%\multiplot{2}{lsmo,lcol}{width=0.45\textwidth}
+%{(a) Smoothed image, and (b) image with color.}

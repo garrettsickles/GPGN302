@@ -1,0 +1,118 @@
+\section{Assignment}
+
+\subsection{\texttt{midpts} example}
+% ------------------------------------------------------------
+\begin{enumerate}
+\item Look at the near-offset section shown in \rfg{nof} and discuss
+  at least $3$ different geologic features visible in the figure. Make
+  an attempt to explain what those features are.
+\item Repeat this discussion on the CMP gather plots,
+  \rfgs{cmp-050}-\rfn{cmp-100}-\rfn{cmp-150}. Some traces appear to be
+  stronger than others. Why does this happen? What is the general
+  shape of the reflections? What does the observed moveout tell you
+  about the subsurface?
+\item The first visible events in the CMPs are direct waves from the
+  sources to the receivers. These events are removed from the data,
+  \rfgs{mut-050}-\rfn{mut-100}-\rfn{mut-150}. What is the moveout of the
+  direct waves and how does it compare with the reflections? Why do we
+  remove the direct arrival from data?
+\item The semblance plots highlight the slowness which best describes
+  a hyperbola at a given time,
+  \rfgs{smb-050}-\rfn{smb-100}-\rfn{smb-150}. Is it possible to observe
+  more than one hyperbola at the same time? Under what conditions
+  would that happen?  If there are different hyperbolas at the same
+  time, which one would you use? Why?
+\item Observe the NMO corrected gathers,
+  \rfgs{nmo-050}-\rfn{nmo-100}-\rfn{nmo-150}. Is the slowness picked on
+  the semblance plots an accurate representation of the image? Does
+  the stacking velocity describe a physical quantity characterizing
+  the Earth? Justify your answers.
+\item Observe the NMO-stack section shown in \rfg{stk} and discuss at
+  least $3$ different geologic features visible in the figure. Make an
+  attempt to explain what those features are. Compare this image with
+  the near-offset section shown in \rfg{nof} and explain what are the
+  main differences you can observe.\footnote{Run \texttt{xtpen
+      Fig/nof.vpl Fig/stk.vpl} to see a movie of the two sections.}
+\item Modify the stacking velocity by changing the smoothing
+  parameters in the \texttt{SConstruct} and see how that impacts the
+  stack. Add new figures to this document to justify your response.
+\end{enumerate}
+
+% ------------------------------------------------------------
+\inputdir{midpts}
+% ------------------------------------------------------------
+\multiplot{4}{cmp-050,mut-050,smb-050,nmo-050}{width=0.2\textwidth}
+{Location 1: CMP gather (a) before and (b) after muting the direct
+  arrival; (c) semblance panel and (d) NMO corrected gathers.}
+
+\multiplot{4}{cmp-100,mut-100,smb-100,nmo-100}{width=0.2\textwidth}
+{Location 2: CMP gather (a) before and (b) after muting the direct
+  arrival; (c) semblance panel and (d) NMO corrected gathers.}
+
+\multiplot{4}{cmp-150,mut-150,smb-150,nmo-150}{width=0.2\textwidth}
+{Location 3: CMP gather (a) before and (b) after muting the direct
+  arrival; (c) semblance panel and (d) NMO corrected gathers.}
+
+\multiplot{1}{nof,stk}{width=\textwidth}{(a) Near-offset section and
+  (b) NMO-stack section.}
+
+\multiplot{1}{rms}{width=\textwidth}{Stacking velocity 0 (rect1 = rect2 = 3)}
+\multiplot{1}{rms1}{width=\textwidth}{Stacking velocity 1  (rect1 = rect2 = 10)}
+\multiplot{1}{rms2}{width=\textwidth}{Stacking velocity 2 (rect1 = rect2 = 100)}
+
+\pagebreak
+
+\subsection{\texttt{midpts} discussion}
+
+\begin{enumerate}
+
+  % 1. Look at the near-offset section shown in Figure 5(a) and discuss at least 3 different geologic features visible inthe figure. Make an attempt to explain what those features are.
+
+  \item Three distinct features in figure \rfn{nof} are as follows:
+  \begin{itemize}
+    \item[\textbf{Faults}] There are at least six visible normal faults in the figure. Two of the major visible normal faults are located along the line segments going from (13 km, 0.25 sec) to (15 km, 2.75 sec) and from (10.3 km, 0.5 sec) to (12 km, 2 sec).
+    \item[\textbf{Ocean Bottom}] The ocean bottom appears in the figure as the continuous horizontal reflector at t = 0.2 sec.
+    \item[\textbf{Distinct Layering}] There is a set of distinct layers indicated by the strong reflectors beginning at the point (8.75 km, 2.6 sec) and moving up and to the right to the point (10.25 km, 2.5 sec). 
+  \end{itemize}
+
+
+  % 2. Repeat this discussion on the CMP gather plots, Figures 2(a)-3(a)-4(a). Some traces appear to be stronger than others. Why does this happen? What is the general shape of the reflections? What does the observed moveout tell you about the subsurface?
+
+  \item The distinct features of figures \rfgs{cmp-050}, \rfn{cmp-100}, and \rfn{cmp-150} are as follows:
+  \begin{itemize}
+    \item[\textbf{Surface}] In each of the three figures the direct wave arrival has not been removed thus the ground surface of the seismic survey is apparent. It is indicated by the strong linear observed moveout bounding the top of the CMP gather.
+    \item[\textbf{Horizontal Layering}] The three figures display similar strong horizontal reflectors indicated by the hyperbolic moveout in the observed CMP gather plots. One of the strongest of these reflectors begins at the location (0.0 km, ~2.0 sec) and curves down until the 2.0 km mark.
+    \item[\textbf{Faulting}] Although it is difficult to correlate exact faults between the three figures, all three display faulting from time 3 seconds to 4 seconds with h ranging from 0 km to 2 km. Within this region their are many discontinuous hyperbolas indicating an interuption to the uniform horizontal layering observed at shallower depths.  
+  \end{itemize} Some traces appear to be stonger than others becuase the receiver responsible for that trace over read the seismic signal. This caused the trace to have a more extreme amplitude than the surrounding traces. The general shape of the reflections in these plots are downwards, moderately continuous hyperbolas. This type of observed moveout indicates the subsurface is composed of uniform horizontal layers.
+
+
+  % 3. The first visible events in the CMPs are direct waves from the sources to the receivers. These events are removed from the data, Figures 2(b)-3(b)-4(b). What is the moveout of the direct waves and how does it compare with the reflections? Why do we remove the direct arrival from data?
+
+  \item The moveout of the direct wave is linear where as the moveout of the reflections are hyperbolic. We remove the direct arrival from the data because it contains no information about the subsurface.
+
+
+  % 4. The semblance plots highlight the slowness which best describes a hyperbola at a given time, Figures 2(c)-3(c)-4(c). Is it possible to observe more than one hyperbola at the same time? Under what conditions would that happen? If there are different hyperbolas at the same time, which one would you use? Why?
+
+  \item It is possible to observe more than one hyberbola at the same time. This could occur if there are strong multiples within the subsurface. In the semplance plots this multiple would appear as an anomolous white area not incident to the purple slowness. Instead the anomoly would be bolow below its source which is incident to the slowness line.  If there were more than one hyperbola present at a given time we would prefer to use the hyperbola with greater velocity. We would choose this hyperbola because we know that as we increase in depth the velocity of the subsurface also tends to increase. This means the non-multiple hyperbola is probably the hyperbola with greater velocity.
+
+
+  % 5. Observe the NMO corrected gathers, Figures 2(d)-3(d)-4(d). Is the slowness picked on the semblance plots an accurate representation of the image? Does the stacking velocity describe a physical quantity characterizing the Earth? Justify your answers.
+
+  \item The slowness picked on the semblance plots is an accurate representation of the image. We know this because the layering in figures \rfgs{nmo-050}, \rfn{nmo-100}, and \rfn{nmo-150} are horizontal. If the slowness was not accurate we would observe curvature in the layers within these figures. The stacking velocity does not describe a physical quantity of the Earth. Instead, it is the velocity which maximizes the stack strength thus improving our seismic image. It does not need to be correspond to any real velocity of the subsurface.
+
+
+  % 6. Observe the NMO-stack section shown in Figure 5(b) and discuss at least 3 different geologic features visible in the figure. Make an attempt to explain what those features are. Compare this image with the near-offset section shown in Figure 5(a) and explain what are the main differences you can observe. (Run xtpen Fig/nof.vpl Fig/stk.vpl to see a movie of the two sections.)
+
+  \item Three distinct features in figure \rfn{stk} are as follows:
+  \begin{itemize}
+    \item[\textbf{Faults}] There are at least six visible normal faults in the figure. Three of the major visible normal faults are located along the line segments going from (13 km, 0.25 sec) to (15 km, 2.75 sec), from (10.3 km, 0.5 sec) to (12 km, 2 sec), and from (8 km, 0.5 sec) to (10 km, 2.6 sec).
+    \item[\textbf{Ocean Bottom}] The ocean bottom appears in the figure as the continuous horizontal reflector at t = 0.15 sec.
+    \item[\textbf{Distinct Layering}] There is a set of distinct layers indicated by the strong reflectors beginning at the point (8.00 km, 1.75 sec) and stepping down from left to right across the stack image due to the normal faulting in this region. 
+  \end{itemize}  The first main difference between the NMO and Stack image is the strong reflector at the top of the figure indicating the ocean bottom. In the NMO image it is relatively weak compared to that of the Stack image. Another significant difference is that the three traces in the NMO image which have no amplitude (m = 12.9km, 15.0 km, 15.7 km) exist in the stack image. The final major difference between the two images is the Stack has much greater clarity at times greater than 2.5 seconds. The NMO image contains little useful information about this region whereas the stack image has supreme clarity whithin this region.
+
+
+  % 7. Modify the stacking velocity by changing the smoothing parameters in the SConstruct and see how that impacts the stack. Add new figures to this document to justify your response.
+
+  \item I modified the smoothing of the stacking velocity by increasing the rect1 and rect2 values by an order of 10 in each of the three respective images in figures \rfn{rms}, \rfn{rms1}, and \rfn{rms2}. In figure \rfn{rms} there is very little smoothing. This is evident because there are various colors intermittently mixed with each other. There is no decisive boundary between various colorings. In figure \rfn{rms1} the intermittently mixed colors become less apparent and boundaries begin to emerge. By the time we have increased our smoothing by two magnitudes in figure \rfn{rms3} there are no intermittently mixed colors and the boundaries of each color are continuous and well defined.
+
+\end{enumerate}

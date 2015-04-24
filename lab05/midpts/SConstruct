@@ -1,0 +1,102 @@
+from rsf.proj import *
+import wplot,midpts
+
+par=midpts.param()
+wplot.param(par)
+
+# ------------------------------------------------------------
+data = 'DATA/midpts/midpts.hh'
+
+# ------------------------------------------------------------
+# get CMP gathers
+Flow('cmp',data,'dd form=native | pad beg2=2 | put o2=0')
+Flow('cmp-byte','cmp','byte gainpanel=a pclip=99')
+
+# near-offset section
+Flow(  'nof','cmp','window n2=1 f2=2')
+Result('nof','window j2=2 |'+midpts.secgrey('pclip=99',par))
+
+# mute direct arrival
+Flow('mut','cmp','mutter half=n v0=1.4')
+Flow('mut-byte','mut','byte gainpanel=a pclip=99')
+
+# ------------------------------------------------------------
+# find semblance
+Flow('smb','mut',
+     'vscan slowness=y half=n v0=0.25 nv=101 dv=0.005 semblance=y')
+Flow('smb-byte','smb','byte gainpanel=a pclip=99 allpos=y')
+
+# ------------------------------------------------------------
+# pick stacking slowness
+# change the smoothness with rect1 and rect2
+Flow('fit','smb','pick rect1=3 rect2=3 vel0=0.7')
+Flow('fit1','smb','pick rect1=3 rect2=50 vel0=0.7')
+Flow('fit2','smb','pick rect1=50 rect2=3 vel0=0.7')
+Flow('fit3','smb','pick rect1=50 rect2=50 vel0=0.7')
+
+for i in (['','1','2','3']):
+  # stacking velocity
+  Flow(  'rms'+i,'fit'+i,'window | math output=1/input')      
+  Result('rms'+i,midpts.secgrey('mean=y color=j',par))
+
+  # compute NMO gathers                 
+  Flow('nmo'+i,['mut','fit'+i],
+       'nmo velocity=${SOURCES[1]} slowness=y half=n')
+  Flow('nmo'+i+'-byte','nmo'+i,'byte gainpanel=a pclip=99')
+
+  # compute stack
+  Flow(  'stk'+i,'nmo'+i,'stack')
+  Result('stk'+i,'window j2=2 |'+midpts.secgrey('pclip=99',par))
+
+  # ------------------------------------------------------------
+  # compute fit weight 
+  Flow(  'wgh'+i,['smb','fit'+i],'slice pick=${SOURCES[1]}')
+  Result('wgh'+i,midpts.secgrey('allpos=y',par))
+
+  ## 
+  # STACKING to INTERVAL velocity conversion
+  ##
+  # compute interval velocity 
+  Flow(['int'+i,'rmc'+i],['rms'+i,'wgh'+i],
+       '''
+       dix weight=${SOURCES[1]} vrmsout=${TARGETS[1]}
+       rect1=3 rect2=3
+       ''')
+
+  Result('int'+i,midpts.secgrey('mean=y color=j',par))
+
+  ## 
+   # TIME to DEPTH interval velocity conversion 
+  ##
+  # migration velocity
+  Flow('vel'+i,['int'+i,'int'+i],
+       '''
+       time2depth nz=%(nz)d oz=%(oz)g dz=%(dz)g intime=y velocity=${SOURCES[1]} |
+       put label1=%(lz)s unit1=%(uz)s label2=%(lx)s unit2=%(ux)s
+       '''%par)
+  Result('vel'+i,wplot.igrey2d('mean=y color=j',par))
+  Result('rmc'+i,midpts.secgrey('mean=y color=j',par))
+
+# ------------------------------------------------------------
+# make plots at various CMPs
+for im in range(0,par['nm'],10):
+    tag = "-%03d"%im
+
+    # semblance panel w/ stacking slowness overlay
+    Plot(  'smb'+tag,'smb-byte','window n3=1 f3=%g |'%im+midpts.smbgrey('',par))
+    Plot(  'fitb'+tag,'fit',    'window n2=1 f2=%g |'%im+midpts.smbplot('',par))
+    Plot(  'fitf'+tag,'fit',    'window n2=1 f2=%g |'%im+midpts.smbplot('plotcol=4 plotfat=6',par))
+    Plot(  'sfit'+tag,['fitb'+tag,'fitf'+tag],'Overlay')
+    Result( 'smb'+tag,[ 'smb'+tag,'sfit'+tag],'Overlay')
+
+    # (time) interval velocity plot
+    Result('int'+tag,'int',
+           'window n2=1 f2=%g |'%im
+           + midpts.intplot('plotcol=4 plotfat=6',par))
+
+    # (time) interval velocity plot
+    Result('vel'+tag,'vel',
+           'window n2=1 f2=%g |'%im
+           + midpts.velplot('plotcol=3 plotfat=6',par))
+
+End()

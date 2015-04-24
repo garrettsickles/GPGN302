@@ -1,0 +1,27 @@
+from rsf.tex import *
+import glob, os
+
+for handout in glob.glob('handout*.tex'):
+    name = os.path.splitext(handout)[0]
+    Paper(name,
+          lclass='cwphandout',
+	  options='10pt,usenames',
+	  use='graphicx,color,listings,amsmath,amssymb,amsbsy,hyperref,framed')
+    
+for slides in glob.glob('slides*.tex'):
+    slidesname = os.path.splitext(slides)[0]
+    Paper(slidesname,
+          lclass='cwpslides',
+          use='multicol,color,overpic,listings,amsmath,amssymb,amsbsy')
+
+for paper in glob.glob('paper*.tex'):
+    name = os.path.splitext(paper)[0]
+    Paper(name,
+          lclass='cwphandout',
+          options='10pt,usenames',
+          use='graphicx,color,listings,amsmath,amssymb,amsbsy,hyperref,framed')
+
+    
+End(lclass='cwphandout',
+          options='10pt,usenames',
+          use='graphicx,color,listings,amsmath,amssymb,amsbsy,hyperref,framed')

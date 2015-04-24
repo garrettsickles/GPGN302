@@ -1,0 +1,81 @@
+\section{Assignment}
+
+\subsection{\texttt{midpts} example}
+% ------------------------------------------------------------
+\begin{enumerate}
+\item The interval velocity (panels b) is derived from the stacking
+  velocity (panels a) using a 1D inversion process. Why is the stacking
+  slowness a smoother function than the interval velocity?
+\item Modify the smoothness parameters for the stacking slowness and
+  explain how this change influences the time interval velocity? Is
+  the function realistic or not? How do you judge this?
+\item Look at the NMO-stack section constructed with your modified
+  stacking slowness. Does this image help you understand if the
+  stac
+  king slowness is realistic or not?
+\item Modify the smoothness parameters for the time-to-depth
+  conversion of the interval velocity. How does this change influence
+  the interval velocity? Is the function realistic or not? How do you
+  judge this?
+\end{enumerate}
+
+\subsection{\texttt{midpts} discussion}
+\begin{enumerate}
+
+  % 1. The interval velocity (panels b) is derived from the stacking velocity (panels a) using a 1D inversion process. Why is the stacking slowness a smoother function than the interval velocity?
+  \item The stacking slowness is a smoother function than the interval velocity because the interval velocity is calculated similarly to a dervative of the stacking velocity for a given time offset. This means the interval velocities are calculated discretely as induvidual slopes and then joined together to create the interval velocity plot seen in panel b. This piecewise manner of construction causes the overall interval velocity plot to be less smooth than the stacking slowness.
+
+
+  % 2. Modify the smoothness parameters for the stacking slowness and explain how this change influences the time interval velocity? Is  the function realistic or not? How do you judge this? 
+  \item I changed the smoothing parameters so that there were 4 different sets of parameters for (rect1, rect2). These parameters were (3, 3), (3, 50), (50, 3), and (50, 50). Each set of parameters produced a different interval velocity plot which significantly differs from the original interval velocity plot seen in figure \rfn{vel}. When rect2 is increased to 50 and rect1 is kept at 3 we get the corresponding interval velocity plot seen in figure \rfn{vel1}. This plot is much different than the original interval velocity plot because it has been smoothed horizontally. The different velocities in figure \rfn{vel1} clearly begin to layer horizontally as if it were a layer cake earth. This result is not realistic because the organization in the subsurface is too uniformly layered. When rect1 is increased to 50 and rect2 is kept at 3 we get the corresponding interval velocity plot seen in figure \rfn{vel2}. This plot differs from the original plot in figure \rfn{vel} because it has been smoothed vertically. This is evidenced by the strong vertical correlations at times greater than 2 seconds seen in figure \rfn{vel2}. There appears to be vertical intrusions of greater velocity into shallower layers of smaller velocities. This interval velocity plot is not realistic because it is very unlikely that this geometry could be acheived through geologic means. When rect1 and rect2 are both increased to 50 we get the corresponding interval velocity plot seen in figure \rfn{vel3}. This plot is significantly smoothed in the horizontal and vertical directions. There do not appear to be any physical features in figure \rfn{vel3}. Instead, this plot shows a completely uniform increase in velocity with depth. This is not possible because this would represent an earth where the velocity is directly related to depth. This means the layering within the earth is continuous, an unlikely geologic scenario.
+
+
+
+  % 3. Look at the NMO-stack section constructed with your modified stacking slowness. Does this image help you understand if the stacking slowness is realistic or not?
+  \item The section constructed with the modified stacking slowness does help me understand whether or not the slowness is realistic. The modified NMO-stack sections seen in figures \rfn{stk1}, \rfn{stk2}, and \rfn{stk3} are  different from the original because certain features in the modified stacks significantly change from the original stack section. For instance, the initial horizontal reflector encountered in the original stack is dampened in the stacks constructed with the modified slowness. Additionally, certain reflectors or features in regions where the stacking slowness is significantly different from the original slowness lose much of there resolution to the point they become unidentifiable. Although much of the original NMO-stack section remains the same in each of the modified sections, certain areas of the modified section diminish in quality. This means the highest quality stack sections are not always produced from the most accurate slowness models.  
+
+
+
+  % 4. Modify the smoothness parameters for the time-to-depth conversion of the interval velocity. How does this change influence the interval velocity? Is the function realistic or not? How do you judge this? (Change Values on line 63 of midpts/SConstruct)
+  \item I modified the smooothing parameters for the time-to-depth conversion such that rect1 = 50 and rect2 = 50. Unfortunately I am not able to add these figures to this report without significantly altering the SConstruct file. The result however are plots similar to those in figures \rfn{int-050} and \rfn{vel-050} except the curves are perfectly smooth, like an asymptotically logarithmic plot rotated 90 degrees. This function cannot be a realistic model of the time to depth conversion of the interval velocity because this would represent a model of the subsurface like that in figure \rfn{vel3}. This type of subsurface velocity distribution is not realistic because it represents a continuous and uniform increase to velocity with depth. This means there is not sedimentary layering in the subsurface which is clearly not realistic.
+
+\end{enumerate}
+
+% ------------------------------------------------------------
+\inputdir{midpts}
+% ------------------------------------------------------------
+
+\multiplot{3}{smb-050,int-050,vel-050}{width=0.2\textwidth}{(a)
+  Semblance panel with picked stacking slowness and (b) interval
+  velocity in time and (c) interval velocity in depth. }
+
+\multiplot{3}{smb-100,int-100,vel-100}{width=0.2\textwidth}{(a)
+  Semblance panel with picked stacking slowness and (b) interval
+  velocity in time and (c) interval velocity in depth.  }
+
+\multiplot{3}{smb-150,int-100,vel-150}{width=0.2\textwidth}{(a)
+  Semblance panel with picked stacking slowness and (b) interval
+  velocity in time and (c) interval velocity in depth. }
+
+\multiplot{2}{nof,stk}{width=\textwidth}{(a) Near-offset section and
+  (b) NMO-stack section.}
+
+\multiplot{2}{rms,int}{width=\textwidth}{(a) Stacking velocity and (b)
+interval velocity. (rect1 = 3, rect2 = 3)}
+
+\multiplot{2}{rms1,int1}{width=\textwidth}{(a) Stacking velocity and (b) interval velocity. (rect1 = 3, rect2 = 50)}
+
+\multiplot{2}{rms2,int2}{width=\textwidth}{(a) Stacking velocity and (b) interval velocity. (rect1 = 50, rect2 = 3)}
+
+\multiplot{2}{rms3,int3}{width=\textwidth}{(a) Stacking velocity and (b) interval velocity. (rect1 = 50, rect2 = 50)}
+
+\multiplot{1}{vel}{width=\textwidth}{Interval velocity converted to depth. (rect1 = 3, rect2 = 3)}
+\multiplot{1}{vel1}{width=\textwidth}{Interval velocity converted to depth. (rect1 = 3, rect2 = 50)}
+\multiplot{1}{vel2}{width=\textwidth}{Interval velocity converted to depth. (rect1 = 50, rect2 = 3)}
+\multiplot{1}{vel3}{width=\textwidth}{Interval velocity converted to depth. (rect1 = 50, rect2 = 50)}
+
+% ------------------------------------------------------------
+\inputdir{midpts}
+% ------------------------------------------------------------
+
+\multiplot{3}{stk1,stk2,stk3}{width=0.5\textwidth}{NMO-stack sections (a) rect1 = 3, rect2 = 50. (b) rect1 = 50, rect2 = 3. (c) rect1 = 50, rect2 = 50.}
